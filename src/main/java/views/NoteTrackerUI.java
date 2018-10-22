@@ -2,10 +2,7 @@ package views;
 
 import controller.Controller;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -27,7 +24,8 @@ public class NoteTrackerUI extends Application {
     private Scene assembleScene()
     {
         VBox panel = new VBox();
-
+        QuotationView quote = new QuotationView("TITLE", "2018-10-22", "ME", "something inspiring");
+        panel.getChildren().add(quote.getExpandedInfo());
 
         return new Scene(panel, WIN_WIDTH, WIN_HEIGHT);
     }

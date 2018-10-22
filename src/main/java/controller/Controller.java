@@ -8,11 +8,12 @@ import java.util.List;
 
 public class Controller {
     private List<INote> model;
-    private NoteTrackerUI view;
 
-    public Controller(NoteTrackerUI view) {
-        this.view = view;
+
+    public Controller() {
         model = new ArrayList<>();
     }
+
+
 
 }

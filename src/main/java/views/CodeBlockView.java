@@ -1,4 +1,5 @@
 package views;
 
-public class CodeBlockView extends BaseNoteView {
+public class CodeBlockView implements IBaseNoteView {
+
 }

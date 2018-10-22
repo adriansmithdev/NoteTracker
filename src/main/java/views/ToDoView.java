@@ -1,4 +1,4 @@
 package views;
 
-public class ToDoView extends BaseNoteView {
+public class ToDoView implements IBaseNoteView {
 }

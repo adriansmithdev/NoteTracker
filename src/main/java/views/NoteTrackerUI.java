@@ -1,5 +1,6 @@
 package views;
 
+import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ public class NoteTrackerUI extends Application {
     public static final int WIN_HEIGHT = 500;
     public static final int WIN_WIDTH = 700;
     private Stage stage;
+    private Controller controller = new Controller();
 
     @Override
     public void start(Stage stage){

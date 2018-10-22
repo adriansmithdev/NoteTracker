@@ -1,4 +1,4 @@
 package views;
 
-public class QuotationView extends BaseNoteView {
+public class QuotationView implements IBaseNoteView {
 }

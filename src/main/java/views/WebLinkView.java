@@ -1,4 +1,4 @@
 package views;
 
-public class WebLinkView extends BaseNoteView {
+public class WebLinkView implements IBaseNoteView {
 }

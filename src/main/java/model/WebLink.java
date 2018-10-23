@@ -8,7 +8,7 @@ public class WebLink implements INote {
     }
 
     @Override
-    public String getContent()
+    public String[] getContent()
     {
         return null;
     }

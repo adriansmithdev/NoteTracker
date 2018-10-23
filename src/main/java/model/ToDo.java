@@ -8,7 +8,13 @@ public class ToDo implements INote {
     }
 
     @Override
-    public String getContent()
+    public String getDate()
+    {
+        return null;
+    }
+
+    @Override
+    public String[] getContent()
     {
         return null;
     }

@@ -32,4 +32,14 @@ public class Quotation implements INote {
         return this.quote + "\n" + this.author;
         //return new String[] {this.quote, this.author};
     }
+
+    public String getQuote()
+    {
+        return this.quote;
+    }
+
+    public String getAuthor()
+    {
+        return this.author;
+    }
 }

@@ -49,6 +49,7 @@ public class NoteTrackerUI extends Application {
 
 
 
+
         return bar;
     }
 }

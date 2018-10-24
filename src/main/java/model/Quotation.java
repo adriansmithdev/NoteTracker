@@ -26,13 +26,6 @@ public class Quotation implements INote {
         return this.dateCreated;
     }
 
-    @Override
-    public String getContent()
-    {
-        return this.quote + "\n" + this.author;
-        //return new String[] {this.quote, this.author};
-    }
-
     public String getQuote()
     {
         return this.quote;
@@ -41,5 +34,16 @@ public class Quotation implements INote {
     public String getAuthor()
     {
         return this.author;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Quotation{" +
+                "title='" + title + '\'' +
+                ", quote='" + quote + '\'' +
+                ", author='" + author + '\'' +
+                ", dateCreated='" + dateCreated + '\'' +
+                '}';
     }
 }

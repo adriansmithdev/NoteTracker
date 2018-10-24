@@ -1,15 +1,25 @@
 package model;
 
 public class CodeBlock implements INote {
+    private String title;
+    private String dateCreated;
+    private String code;
+
+
     @Override
     public String getTitle()
     {
-        return null;
+        return this.title;
     }
 
     @Override
     public String getDateCreated()
     {
-        return null;
+        return this.dateCreated;
+    }
+
+    public String getCode()
+    {
+        return this.code;
     }
 }

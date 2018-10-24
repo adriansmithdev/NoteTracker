@@ -8,8 +8,7 @@ public class WebLink implements INote {
     }
 
     @Override
-    public String[] getContent()
-    {
+    public String getDateCreated() {
         return null;
     }
 }

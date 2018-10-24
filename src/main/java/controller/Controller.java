@@ -1,22 +1,24 @@
 package controller;
 
 import model.INote;
+import model.database.DBData;
+import model.database.INoteCRUD;
 import views.NoteTrackerUI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private List<INote> model; // Change List<INote> to INoteCRUD and implement the interface in another class???
+    private INoteCRUD model; // Change List<INote> to INoteCRUD and implement the interface in another class???
 
 
     public Controller()
     {
-        model = new ArrayList<>();
+        model = new DBData();
     }
 
     public List<INote> getNotes()
     {
-        return model; // Shouldn't return model itself, need to have model.getNotes instead
+        return model.getNotes();
     }
 }

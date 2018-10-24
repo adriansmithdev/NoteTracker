@@ -8,5 +8,5 @@ public interface INoteCRUD {
     void addNote(INote note);
     void removeNote(INote note);
     void updateNote(INote note);
-    List<INote> getNotes(INote note);
+    List<INote> getNotes();
 }

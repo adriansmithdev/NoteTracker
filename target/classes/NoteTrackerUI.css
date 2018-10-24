@@ -1,0 +1,19 @@
+.button-element {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+    -fx-start-margin: 10;
+    -fx-end-margin: 10;
+}
+
+#header {
+    -fx-pref-width: 1000000;
+    -fx-spacing: 150;
+}
+
+#filter {
+    -fx-pref-width: 100;
+}
+
+#create {
+    -fx-pref-width: 250;
+}

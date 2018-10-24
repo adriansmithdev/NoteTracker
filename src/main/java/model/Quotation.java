@@ -5,6 +5,7 @@ public class Quotation implements INote {
     private String quote;
     private String author;
     private String dateCreated;
+    private Notes noteType;
 
     public Quotation(String title, String quote, String author, String dateCreated)
     {
@@ -12,6 +13,7 @@ public class Quotation implements INote {
         this.quote = quote;
         this.author = author;
         this.dateCreated = dateCreated;
+        this.noteType = Notes.QUOTATION;
     }
 
     @Override
@@ -24,6 +26,12 @@ public class Quotation implements INote {
     public String getDateCreated()
     {
         return this.dateCreated;
+    }
+
+    @Override
+    public Notes getType()
+    {
+        return this.noteType;
     }
 
     public String getQuote()

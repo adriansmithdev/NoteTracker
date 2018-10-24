@@ -17,6 +17,11 @@ public class Controller {
         model = new DBData();
     }
 
+    public void addNote(INote note)
+    {
+        model.addNote(note);
+    }
+
     public List<INote> getNotes()
     {
         return model.getNotes();

@@ -4,10 +4,7 @@ import controller.Controller;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -66,36 +63,56 @@ public class NoteTrackerUI extends Application {
 
     private VBox assembleLeftPane() {
         VBox vBox = new VBox();
-        Button createNote = new Button("+ Note");
+        Button beginNote = new Button("+ Note");
+        Button createNote = new Button("Create");
 
-        vBox.getChildren().addAll(createNote, assembleCreateNote());
-        createNote.getStyleClass().add(BUTTON_CLASS);
-        createNote.setId(CREATE_ID);
+        vBox.getChildren().addAll(beginNote, assembleCreateNote(), createNote);
+        beginNote.getStyleClass().add(BUTTON_CLASS);
+        beginNote.setId(CREATE_ID);
 
         return vBox;
     }
 
     private VBox assembleCreateNote() {
         VBox vBox = new VBox();
-        vBox.getChildren().add(new Label("Title"));
 
         // title
         TextField title = new TextField();
         title.setPromptText("Title");
-        vBox.getChildren().add(title);
 
         // note type dropdown
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.setPromptText("Card Type");
+        for (String CARD_TYPE : CARD_TYPES) {
+            comboBox.getItems().add(CARD_TYPE);
+        }
 
+        TextField description = new TextField();
+        description.setPromptText("Description");
+
+        vBox.getChildren().addAll(new Label("Title"), title, comboBox,  new Label("Description"), description);
 
         return vBox;
     }
 
     private VBox assembleFilterOptions() {
         VBox vBox = new VBox();
+        vBox.getChildren().add(new Label("Filter"));
 
-        for (int i = 0; i < CARD_TYPES.length; i++) {
-            vBox.getChildren().add(new CheckBox(CARD_TYPES[i]));
+        for (String CARD_TYPE : CARD_TYPES) {
+            vBox.getChildren().add(new CheckBox(CARD_TYPE));
         }
+
+        return vBox;
+    }
+
+    private VBox assembleSingleNote(String title, String content) {
+        VBox vBox = new VBox();
+
+        Label titleLabel = new Label(title);
+        Label contentLabel = new Label(content);
+
+        vBox.getChildren().addAll(titleLabel, contentLabel);
 
         return vBox;
     }

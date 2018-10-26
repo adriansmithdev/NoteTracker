@@ -1,7 +1,5 @@
 package model.database;
 
-import com.sun.tools.javac.jvm.Code;
-import javafx.scene.paint.Color;
 import model.*;
 
 import java.sql.*;
@@ -19,7 +17,7 @@ public class DBData implements INoteCRUD {
             this.conn = DriverManager.getConnection("jdbc:sqlite:notesDB.sqlite");
             Class.forName("org.sqlite.JDBC"); // fix our project path
 
-            System.out.println("Connected to notesDB!");
+            System.out.println("Connected to notesDB.sqlite!");
         } catch (SQLException | ClassNotFoundException e) {
             //rethrow exception if cannot connect
             throw new IllegalStateException("Cannot connect to DB: " + e.getMessage());
@@ -65,10 +63,12 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public void removeNote(INote note)
+    public boolean removeNote(INote note)
     {
 
+        return false;
     }
+
 
     @Override
     public void updateNote(INote note)
@@ -86,18 +86,37 @@ public class DBData implements INoteCRUD {
             addCodeBlocksToList(notes);
             addWebLinksToList(notes);
             addToDosToList(notes);
-            notes.sort(new SortByDateTime());
+            notes.sort(new SortByDateTime()); //TODO verify that SortByDateTime is correct
         } catch (SQLException e) {
-            throw new IllegalStateException("Cannot retrieve colors: " + e.getMessage());
+            throw new IllegalStateException("Cannot retrieve note: " + e.getMessage());
         }
 
+        return notes;
+    }
+
+    public List<INote> getNotes(Notes typeOfNote)
+    {
+        List<INote> notes = new ArrayList<>();
+        try {
+            if(typeOfNote == Notes.QUOTATION)
+                addQuotesToList(notes);
+            else if(typeOfNote == Notes.CODE_BLOCK)
+                addCodeBlocksToList(notes);
+            else if(typeOfNote == Notes.TO_DO){
+                addToDosToList(notes);
+            }else if(typeOfNote == Notes.WEBLINK){
+                addWebLinksToList(notes);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return notes;
     }
 
     private void addCodeBlocksToList(List<INote> listOfNotes) throws SQLException
     {
         ResultSet results = conn.createStatement().executeQuery(
-                "SELECT DateCreated, title, Quote, Code FROM CodeBlocksTable");
+                "SELECT DateCreated, title, Code FROM CodeBlocksTable");
 
         while (results.next()) //move to the next row and return true if successful
         {
@@ -130,7 +149,7 @@ public class DBData implements INoteCRUD {
     private void addToDosToList(List<INote> listOfNotes) throws SQLException
     {
         ResultSet results = conn.createStatement().executeQuery(
-                "SELECT DateCreated, title, Quote, Author FROM ToDoListTable");
+                "SELECT DateCreated, Title, ListID FROM ToDoListTable");
 
         while (results.next()) //move to the next row and return true if successful
         {

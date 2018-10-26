@@ -1,6 +1,7 @@
 package controller;
 
 import model.INote;
+import model.Notes;
 import model.database.DBData;
 import model.database.INoteCRUD;
 import views.NoteTrackerUI;
@@ -25,5 +26,15 @@ public class Controller {
     public List<INote> getNotes()
     {
         return model.getNotes();
+    }
+    
+    public List<INote> getNotes(Notes typeOfNote)
+    {
+        return model.getNotes(typeOfNote);
+    }
+    
+    public boolean removeNote(INote note)
+    {
+        return model.removeNote(note);
     }
 }

@@ -50,6 +50,7 @@ public class NoteTrackerUI extends Application {
     @Override
     public void start(Stage stage){
         this.stage = stage;
+        controller.getNotes();
         stage.setScene(assembleScene());
         stage.setTitle(STAGE_TITLE);
         stage.show();
@@ -151,7 +152,6 @@ public class NoteTrackerUI extends Application {
         vBox.getStyleClass().add(CARD_CLASS);
 
         vBox.getChildren().addAll(titleLabel, contentLabel);
-
         return vBox;
     }
 }

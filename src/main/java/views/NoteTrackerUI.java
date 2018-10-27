@@ -2,13 +2,18 @@ package views;
 
 import controller.Controller;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.INote;
+import model.Notes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class NoteTrackerUI extends Application {
@@ -39,13 +44,6 @@ public class NoteTrackerUI extends Application {
     private static final String CARD_CLASS = "card";
     private static final String HEADER_CLASS = "header";
     private static final String DESCRIPTION_CLASS = "describe";
-
-    private static final String[] CARD_TYPES = {
-            "Code Blocks",
-            "Quotations",
-            "To-Do Lists",
-            "Web Links"
-    };
 
     @Override
     public void start(Stage stage){
@@ -109,13 +107,22 @@ public class NoteTrackerUI extends Application {
 
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText(INPUT_TYPE);
-        for (String CARD_TYPE : CARD_TYPES) {
-            comboBox.getItems().add(CARD_TYPE);
+        for (Notes noteType : Notes.values()) {
+            comboBox.getItems().add(noteType.name());
         }
 
         Label labelDescription = new Label(INPUT_DESCRIPTION);
         TextField description = new TextField();
         description.setPromptText(INPUT_DESCRIPTION);
+
+        createNote.setOnAction(event -> {
+            Map<NoteInputType, String> formInput = new HashMap<>();
+            formInput.put(NoteInputType.CARD_TYPE, comboBox.getValue());
+            formInput.put(NoteInputType.HEADER, title.getText());
+            formInput.put(NoteInputType.CONTENT, description.getText());
+
+            controller.addNote(formInput);
+        });
 
         vBox.getChildren().addAll(
                 beginNoteCreation,
@@ -134,8 +141,8 @@ public class NoteTrackerUI extends Application {
         VBox vBox = new VBox();
         vBox.getChildren().add(new Label(FILTER_LABEL));
 
-        for (String CARD_TYPE : CARD_TYPES) {
-            vBox.getChildren().add(new CheckBox(CARD_TYPE));
+        for (Notes noteType : Notes.values()) {
+            vBox.getChildren().add(new CheckBox(noteType.name()));
         }
 
         return vBox;

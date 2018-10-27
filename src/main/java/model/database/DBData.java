@@ -39,9 +39,9 @@ public class DBData implements INoteCRUD {
 
         try {
             Statement stmt = conn.createStatement();
-            stmt.execute("INSERT INTO QuotesTable VALUES(DATETIME('now'), " +
-                    quote.getTitle() + ", " +
-                    quote.getCode() + ")");
+            stmt.execute("INSERT INTO CodeBlocksTable VALUES(DATETIME('now'), '" +
+                    quote.getTitle() + "', '" +
+                    quote.getCode() + "')");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot insert code block note: " + e.getMessage());
         }
@@ -53,10 +53,10 @@ public class DBData implements INoteCRUD {
 
         try {
             Statement stmt = conn.createStatement();
-            stmt.execute("INSERT INTO QuotesTable VALUES(DATETIME('now'), " +
-                    quote.getTitle() + ", " +
-                    quote.getQuote() + "," +
-                    quote.getAuthor() + ")");
+            stmt.execute("INSERT INTO QuotesTable VALUES(DATETIME('now'), '" +
+                    quote.getTitle() + "', '" +
+                    quote.getQuote() + "', '" +
+                    quote.getAuthor() + "')");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot insert quote note: " + e.getMessage());
         }

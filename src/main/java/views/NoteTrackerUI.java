@@ -37,6 +37,7 @@ public class NoteTrackerUI extends Application {
     private static final int PREF_COLUMNS = 3;
 
     private Stage stage;
+    private BorderPane borderPane;
     private Controller controller = new Controller();
 
     private static final String BUTTON_CLASS = "button-element";
@@ -57,6 +58,7 @@ public class NoteTrackerUI extends Application {
     private Scene assembleScene()
     {
         BorderPane borderPane = new BorderPane();
+        this.borderPane = borderPane;
 
         borderPane.setCenter(assembleCardViewing());
         borderPane.setLeft(assembleCreateNote());
@@ -81,9 +83,6 @@ public class NoteTrackerUI extends Application {
         tile.setPrefColumns(PREF_COLUMNS);
         tile.setMaxWidth(Region.USE_PREF_SIZE);
 
-        tile.getChildren().add(assembleSingleNote("Test Card!", "Test value!"));
-        tile.getChildren().add(assembleSingleNote("Test Card2!", "Test longer value!"));
-        tile.getChildren().add(assembleSingleNote("Test Card3!", "Test abcascdssdfaflksfjdafljks value!"));
         List<INote> notes = controller.getNotes();
         for (INote note : notes) {
             tile.getChildren().add(assembleSingleNote(note.getTitle(), "Test content"));
@@ -122,6 +121,7 @@ public class NoteTrackerUI extends Application {
             formInput.put(NoteInputType.CONTENT, description.getText());
 
             controller.addNote(formInput);
+            borderPane.setCenter(assembleCardViewing());
         });
 
         vBox.getChildren().addAll(

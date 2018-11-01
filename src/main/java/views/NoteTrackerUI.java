@@ -1,12 +1,14 @@
 package views;
 
-import controller.Controller;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.INote;
 import model.Notes;
@@ -16,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @author Kyle, Adrian
+ * @version 1
+ */
 public class NoteTrackerUI extends Application {
 
     private static final int WIN_HEIGHT = 500;
@@ -25,32 +31,42 @@ public class NoteTrackerUI extends Application {
 
     private static final String CSS_SHEET = "NoteTrackerUI.css";
 
-    private static final String BEGIN_NOTE = "+ Note";
-    private static final String CREATE_NOTE = "Create";
-    private static final String INPUT_TITLE = "Title";
-    private static final String INPUT_TYPE = "Card Type";
-    private static final String INPUT_DESCRIPTION = "Description";
+    private static final String TILEPANE_ID = "tile-pane";
 
-    private static final String FILTER_LABEL = "Filter";
+    private static final String BEGIN_NOTE = "+ Note";
+    private static final String BEGIN_NOTE_ID = "create";
+
+    private static final String CREATE_NOTE = "Create";
+    private static final String CREATE_NOTE_ID = "complete-note";
+
+    private static final String INPUT_TITLE = "Title";
+    private static final String INPUT_TITLE_ID = "title_id";
+
+    private static final String INPUT_TYPE = "Card Type";
+    private static final String INPUT_TYPE_ID = "type_id";
+
+    private static final String INPUT_DESCRIPTION = "Description";
+    private static final String INPUT_DESCRIPTION_ID = "description_id";
 
     private static final int CARD_GAP = 8;
     private static final int PREF_COLUMNS = 3;
 
-    private Stage stage;
-    private BorderPane borderPane;
-    private Controller controller = new Controller();
-
     private static final String BUTTON_CLASS = "button-element";
-    private static final String CREATE_ID = "create";
     private static final String CARD_CLASS = "card";
     private static final String HEADER_CLASS = "header";
     private static final String DESCRIPTION_CLASS = "describe";
 
+    private static final String FILTER_LABEL = "Filter";
+
+    private Stage stage;
+    private BorderPane borderPane;
+    private Scene scene;
+
     @Override
     public void start(Stage stage){
         this.stage = stage;
-        controller.getNotes();
-        stage.setScene(assembleScene());
+        this.scene = assembleScene();
+        stage.setScene(this.scene);
         stage.setTitle(STAGE_TITLE);
         stage.show();
     }
@@ -82,11 +98,7 @@ public class NoteTrackerUI extends Application {
         tile.setVgap(CARD_GAP);
         tile.setPrefColumns(PREF_COLUMNS);
         tile.setMaxWidth(Region.USE_PREF_SIZE);
-
-        List<INote> notes = controller.getNotes();
-        for (INote note : notes) {
-            tile.getChildren().add(assembleSingleNote(note.getTitle(), "Test content"));
-        }
+        tile.setId(TILEPANE_ID);
 
         return tile;
     }
@@ -96,9 +108,10 @@ public class NoteTrackerUI extends Application {
 
         Button beginNoteCreation = new Button(BEGIN_NOTE);
         Button createNote = new Button(CREATE_NOTE);
+        createNote.setId(CREATE_NOTE_ID);
 
         beginNoteCreation.getStyleClass().add(BUTTON_CLASS);
-        beginNoteCreation.setId(CREATE_ID);
+        beginNoteCreation.setId(BEGIN_NOTE_ID);
 
         Label labelTitle = new Label(INPUT_TITLE);
         TextField title = new TextField();
@@ -113,16 +126,6 @@ public class NoteTrackerUI extends Application {
         Label labelDescription = new Label(INPUT_DESCRIPTION);
         TextField description = new TextField();
         description.setPromptText(INPUT_DESCRIPTION);
-
-        createNote.setOnAction(event -> {
-            Map<NoteInputType, String> formInput = new HashMap<>();
-            formInput.put(NoteInputType.CARD_TYPE, comboBox.getValue());
-            formInput.put(NoteInputType.HEADER, title.getText());
-            formInput.put(NoteInputType.CONTENT, description.getText());
-
-            controller.addNote(formInput);
-            borderPane.setCenter(assembleCardViewing());
-        });
 
         vBox.getChildren().addAll(
                 beginNoteCreation,
@@ -148,17 +151,55 @@ public class NoteTrackerUI extends Application {
         return vBox;
     }
 
-    private VBox assembleSingleNote(String title, String content) {
-        VBox vBox = new VBox();
+    /**
+     * Binds the button at the end of typing a notes data
+     * @param event function that occurs after click
+     */
+    public void bindCreateNote(EventHandler<ActionEvent> event) {
+        Button createNote = (Button) this.scene.lookup(String.format("#%s", CREATE_NOTE_ID));
+        createNote.setOnAction(event);
+    }
 
-        Label titleLabel = new Label(title);
-        Label contentLabel = new Label(content);
+    /**
+     * Pulls all data from view that has been input
+     * @return Map of all data entered
+     */
+    public Map<NoteInputType, String> getInputData() {
+        HashMap<NoteInputType, String> data = new HashMap<>();
 
-        titleLabel.getStyleClass().add(HEADER_CLASS);
-        contentLabel.getStyleClass().add(DESCRIPTION_CLASS);
-        vBox.getStyleClass().add(CARD_CLASS);
+        @SuppressWarnings("unchecked")
+        ComboBox<String> comboBox = (ComboBox<String>) this.scene.lookup(String.format("#%s", INPUT_TYPE_ID));
+        data.put(NoteInputType.CARD_TYPE, comboBox.getValue());
 
-        vBox.getChildren().addAll(titleLabel, contentLabel);
-        return vBox;
+        TextField title = (TextField) this.scene.lookup(String.format("#%s", INPUT_TITLE_ID));
+        data.put(NoteInputType.HEADER, title.getText());
+
+        TextField description = (TextField) this.scene.lookup(String.format("#%s", INPUT_DESCRIPTION_ID));
+        data.put(NoteInputType.CONTENT, description.getText());
+
+        return data;
+    }
+
+    /**
+     * Updates the notes in the view
+     * @param notes that should be displayed
+     */
+    public void updateNotes(List<INote> notes) {
+        TilePane tile = (TilePane) this.scene.lookup(String.format("#%s", TILEPANE_ID));
+
+        NoteFactory factory = new NoteFactory();
+
+        for (INote note : notes) {
+            tile.getChildren().add(factory.getNoteFor(note.getType().name()).createSampleView(note));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NoteTrackerUI{" +
+                "stage=" + stage +
+                ", borderPane=" + borderPane +
+                ", scene=" + scene +
+                '}';
     }
 }

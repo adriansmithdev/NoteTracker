@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import model.INote;
 import model.Quotation;
 
-public class QuoteFactory implements INoteCreator {
+public class QuoteView implements INoteCreator {
 
     @Override
     public HBox createSampleView(INote note)

@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Application;
 import model.CodeBlock;
 import model.INote;
 import model.Notes;
@@ -7,25 +8,28 @@ import model.Quotation;
 import model.database.DBData;
 import model.database.INoteCRUD;
 import views.NoteInputType;
+import views.NoteTrackerUI;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Controller {
-    private INoteCRUD model; // Change List<INote> to INoteCRUD and implement the interface in another class???
+    private INoteCRUD model;
+    private NoteTrackerUI ui;
 
-    public Controller()
+    public Controller(String[] args)
     {
+        ui = new NoteTrackerUI();
         model = new DBData();
+        Application.launch(ui.getClass(), args);
+        ui.bindCreateNote((event) -> createNoteFromUI());
     }
 
-    public void addNote(INote note)
-    {
-        model.addNote(note);
-    }
+    private void createNoteFromUI() {
+        Map<NoteInputType, String> inputValues = ui.getInputData();
 
-    public void addNote(Map<NoteInputType, String> inputValues) {
         String cardType = inputValues.get(NoteInputType.CARD_TYPE);
         Notes cardTypeAsEnum = Notes.valueOf(cardType);
 
@@ -50,6 +54,15 @@ public class Controller {
         }
 
         model.addNote(result);
+    }
+
+    public void addNote(INote note)
+    {
+        model.addNote(note);
+    }
+
+    public void addNote(Map<NoteInputType, String> inputValues) {
+
     }
 
     public List<INote> getNotes()

@@ -5,9 +5,9 @@ public class NoteFactory {
     public INoteCreator getNoteFor(String noteType) {
         switch (noteType.toLowerCase()) {
             case "codeblock":
-                return new CodeBlockView();
+                return new CodeBlockFactory();
             case "quote":
-                return new QuoteView();
+                return new QuoteFactory();
             default:
                 return new ErrorView();
         }

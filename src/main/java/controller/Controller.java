@@ -24,6 +24,7 @@ public class Controller {
         ui = new NoteTrackerUI();
         model = new DBData();
         Application.launch(ui.getClass(), args);
+
         ui.bindCreateNote((event) -> createNoteFromUI());
     }
 
@@ -54,6 +55,7 @@ public class Controller {
         }
 
         model.addNote(result);
+        ui.updateNotes(getNotes());
     }
 
     public void addNote(INote note)

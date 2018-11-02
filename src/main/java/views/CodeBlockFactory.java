@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import model.CodeBlock;
 import model.INote;
 
-public class CodeBlockView implements INoteCreator {
+public class CodeBlockFactory implements INoteCreator {
 
     @Override
     public HBox createSampleView(INote note) {

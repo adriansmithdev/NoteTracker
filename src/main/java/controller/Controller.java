@@ -19,13 +19,9 @@ public class Controller {
     private INoteCRUD model;
     private NoteTrackerUI ui;
 
-    public Controller(String[] args)
+    public Controller()
     {
-        ui = new NoteTrackerUI();
         model = new DBData();
-        Application.launch(ui.getClass(), args);
-
-        ui.bindCreateNote((event) -> createNoteFromUI());
     }
 
     private void createNoteFromUI() {
@@ -55,7 +51,6 @@ public class Controller {
         }
 
         model.addNote(result);
-        ui.updateNotes(getNotes());
     }
 
     public void addNote(INote note)

@@ -8,6 +8,6 @@ import views.NoteTrackerUI;
 public class Launcher {
 
     public static void main(String[] args) {
-        Controller controller = new Controller(args);
+        Application.launch(NoteTrackerUI.class, args);
     }
 }

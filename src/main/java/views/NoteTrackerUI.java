@@ -1,14 +1,12 @@
 package views;
 
+import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.INote;
 import model.Notes;
@@ -61,14 +59,17 @@ public class NoteTrackerUI extends Application {
     private Stage stage;
     private BorderPane borderPane;
     private Scene scene;
+    private Controller controller;
 
     @Override
     public void start(Stage stage){
+        controller = new Controller();
         this.stage = stage;
         this.scene = assembleScene();
         stage.setScene(this.scene);
         stage.setTitle(STAGE_TITLE);
         stage.show();
+        updateNotes(controller.getNotes());
     }
 
     private Scene assembleScene()
@@ -109,6 +110,7 @@ public class NoteTrackerUI extends Application {
         Button beginNoteCreation = new Button(BEGIN_NOTE);
         Button createNote = new Button(CREATE_NOTE);
         createNote.setId(CREATE_NOTE_ID);
+        createNote.setOnAction(event -> {});
 
         beginNoteCreation.getStyleClass().add(BUTTON_CLASS);
         beginNoteCreation.setId(BEGIN_NOTE_ID);
@@ -152,15 +154,6 @@ public class NoteTrackerUI extends Application {
     }
 
     /**
-     * Binds the button at the end of typing a notes data
-     * @param event function that occurs after click
-     */
-    public void bindCreateNote(EventHandler<ActionEvent> event) {
-        Button createNote = (Button) this.scene.lookup(String.format("#%s", CREATE_NOTE_ID));
-        createNote.setOnAction(event);
-    }
-
-    /**
      * Pulls all data from view that has been input
      * @return Map of all data entered
      */
@@ -180,17 +173,15 @@ public class NoteTrackerUI extends Application {
         return data;
     }
 
-    /**
-     * Updates the notes in the view
-     * @param notes that should be displayed
-     */
-    public void updateNotes(List<INote> notes) {
+    private void updateNotes(List<INote> notes) {
         TilePane tile = (TilePane) this.scene.lookup(String.format("#%s", TILEPANE_ID));
 
         NoteFactory factory = new NoteFactory();
 
         for (INote note : notes) {
-            tile.getChildren().add(factory.getNoteFor(note.getType().name()).createSampleView(note));
+            String noteName = note.getType().name();
+            HBox hBox = factory.getNoteFor(noteName).createSampleView(note);
+            tile.getChildren().add(hBox);
         }
     }
 

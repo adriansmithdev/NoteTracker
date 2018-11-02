@@ -2,8 +2,6 @@ package views;
 
 import model.Notes;
 
-import model.Notes.*;
-
 public class NoteFactory {
 
     public INoteCreator getNoteFor(Notes noteType) {

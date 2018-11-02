@@ -4,11 +4,16 @@ import model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBData implements INoteCRUD {
 
     private Connection conn;
+
+    private static Map<Notes, String> notesToTableMap = new HashMap<>();
+
 
     public DBData()
     {
@@ -22,6 +27,11 @@ public class DBData implements INoteCRUD {
             //rethrow exception if cannot connect
             throw new IllegalStateException("Cannot connect to DB: " + e.getMessage());
         }
+
+        notesToTableMap.put(Notes.CODE_BLOCK, "CodeBlocksTable");
+        notesToTableMap.put(Notes.QUOTATION, "QuotesTable");
+        notesToTableMap.put(Notes.WEBLINK, "WebLinksTable");
+        notesToTableMap.put(Notes.TO_DO, "ToDoListTable");
     }
 
     @Override
@@ -65,46 +75,111 @@ public class DBData implements INoteCRUD {
     @Override
     public boolean removeNote(INote note)
     {
-
-        return false;
+        try {
+            removeNoteFromTable(note, notesToTableMap.get(note.getType()));
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    private void removeNoteFromTable(INote note, String table) throws SQLException
+    {
+        Statement stmt = conn.createStatement();
+        stmt.execute("DELETE FROM " + table + " WHERE DateCreated = " + note.getDateCreated());
+    }
 
     @Override
     public void updateNote(INote note)
     {
+        try {
+            if (note.getType() == Notes.QUOTATION) {
+                updateNoteInQuotesTable(note);
+            } else if (note.getType() == Notes.CODE_BLOCK) {
+                updateNoteInCodeBlocksTable(note);
+            } else if (note.getType() == Notes.TO_DO) {
+                updateNoteInToDoListTable(note);
+            } else if (note.getType() == Notes.WEBLINK) {
+                updateNoteInWebLinksTable(note);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void updateNoteInWebLinksTable(INote note) throws SQLException
+    {
+        WebLink link = (WebLink) note;
+
+        Statement stmt = conn.createStatement();
+
+        stmt.execute("UPDATE WebLinksTable SET Title = " + link.getTitle() + ", " +
+                "URL = " + link.getURL() +
+                "WHERE DateCreated = " + link.getDateCreated());
+    }
+
+    private void updateNoteInToDoListTable(INote note) throws SQLException
+    {
+        ToDo toDo = (ToDo) note;
+
+        Statement stmt = conn.createStatement();
+
+
+    }
+
+    private void updateNoteInCodeBlocksTable(INote note) throws SQLException
+    {
+        CodeBlock codeBlock = (CodeBlock) note;
+
+        Statement stmt = conn.createStatement();
+
+        stmt.execute("UPDATE CodeBlocksTable SET Title = " + codeBlock.getTitle() + ", " +
+                "Code = " + codeBlock.getCode() +
+                "WHERE DateCreated = " + codeBlock.getDateCreated());
+    }
+
+    private void updateNoteInQuotesTable(INote note) throws SQLException
+    {
+        Quotation quote = (Quotation) note;
+
+        Statement stmt = conn.createStatement();
+
+        stmt.execute("UPDATE QuotesTable SET Title = " + quote.getTitle() + ", " +
+                "Quote = " + quote.getQuote() + ", " +
+                "Author = " + quote.getAuthor() + ", " +
+                "WHERE DateCreated = " + quote.getDateCreated());
     }
 
     @Override
     public List<INote> getNotes()
     {
-        List<INote> notes = new ArrayList<>();
+        List<INote> noteList = new ArrayList<>();
 
         try {
-            addQuotesToList(notes);
-            addCodeBlocksToList(notes);
-            addWebLinksToList(notes);
-            addToDosToList(notes);
-            notes.sort(new SortByDateTime()); //TODO verify that SortByDateTime is correct
+            addQuotesToList(noteList);
+            addCodeBlocksToList(noteList);
+            addWebLinksToList(noteList);
+            addToDosToList(noteList);
+            noteList.sort(new SortByDateTime()); //TODO verify that SortByDateTime is correct
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot retrieve note: " + e.getMessage());
         }
 
-        return notes;
+        return noteList;
     }
 
     public List<INote> getNotes(Notes typeOfNote)
     {
         List<INote> notes = new ArrayList<>();
         try {
-            if(typeOfNote == Notes.QUOTATION)
+            if (typeOfNote == Notes.QUOTATION)
                 addQuotesToList(notes);
-            else if(typeOfNote == Notes.CODE_BLOCK)
+            else if (typeOfNote == Notes.CODE_BLOCK)
                 addCodeBlocksToList(notes);
-            else if(typeOfNote == Notes.TO_DO){
+            else if (typeOfNote == Notes.TO_DO) {
                 addToDosToList(notes);
-            }else if(typeOfNote == Notes.WEBLINK){
+            } else if (typeOfNote == Notes.WEBLINK) {
                 addWebLinksToList(notes);
             }
         } catch (SQLException e) {
@@ -160,7 +235,7 @@ public class DBData implements INoteCRUD {
 
             List<ToDoItem> individualToDoItems = new ArrayList<>();
 
-            while(toDoResults.next()){
+            while (toDoResults.next()) {
                 ToDoItem item = new ToDoItem(
                         toDoResults.getString("ToDo"),
                         toDoResults.getBoolean("isCompleted")

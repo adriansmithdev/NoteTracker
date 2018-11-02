@@ -1,12 +1,16 @@
 package views;
 
+import model.Notes;
+
+import model.Notes.*;
+
 public class NoteFactory {
 
-    public INoteCreator getNoteFor(String noteType) {
-        switch (noteType.toUpperCase()) {
-            case "CODE_BLOCK":
+    public INoteCreator getNoteFor(Notes noteType) {
+        switch (noteType) {
+            case CODE_BLOCK:
                 return new CodeBlockFactory();
-            case "QUOTATION":
+            case QUOTATION:
                 return new QuoteFactory();
             default:
                 return new ErrorView();

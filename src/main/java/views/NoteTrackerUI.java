@@ -179,8 +179,7 @@ public class NoteTrackerUI extends Application {
         NoteFactory factory = new NoteFactory();
 
         for (INote note : notes) {
-            String noteName = note.getType().name();
-            HBox hBox = factory.getNoteFor(noteName).createSampleView(note);
+            HBox hBox = factory.getNoteFor(note.getType()).createSampleView(note);
             tile.getChildren().add(hBox);
         }
     }

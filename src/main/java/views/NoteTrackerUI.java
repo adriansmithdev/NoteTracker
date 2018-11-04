@@ -1,9 +1,8 @@
 package views;
 
 import controller.Controller;
-import javafx.event.ActionEvent;
 import javafx.application.Application;
-import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -11,10 +10,7 @@ import javafx.stage.Stage;
 import model.INote;
 import model.Notes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Kyle, Adrian
@@ -34,17 +30,20 @@ public class NoteTrackerUI extends Application {
     private static final String BEGIN_NOTE = "+ Note";
     private static final String BEGIN_NOTE_ID = "create";
 
+    private static final String TYPE_HOLDER_ID = "type_holder_id";
+    private static final String INPUTS_HOLDER_ID = "input_holder_id";
+
     private static final String CREATE_NOTE = "Create";
     private static final String CREATE_NOTE_ID = "complete-note";
 
-    private static final String INPUT_TITLE = "Title";
+    private static final String INPUT_TITLE_LABEL = "Title";
     private static final String INPUT_TITLE_ID = "title_id";
-
     private static final String INPUT_TYPE = "Card Type";
     private static final String INPUT_TYPE_ID = "type_id";
-
-    private static final String INPUT_DESCRIPTION = "Description";
+    private static final String INPUT_DESCRIPTION_LABEL = "Description";
     private static final String INPUT_DESCRIPTION_ID = "description_id";
+    private static final String INPUT_AUTHOR_LABEL = "Author";
+    private static final String INPUT_AUTHOR_ID = "author_id";
 
     private static final int CARD_GAP = 8;
     private static final int PREF_COLUMNS = 3;
@@ -60,12 +59,17 @@ public class NoteTrackerUI extends Application {
     private BorderPane borderPane;
     private Scene scene;
     private Controller controller;
+    private Map<NoteInputType, String> inputValues;
+    private Set<Notes> currentFilters;
 
     @Override
     public void start(Stage stage){
         controller = new Controller();
         this.stage = stage;
         this.scene = assembleScene();
+        inputValues = new HashMap<>();
+        currentFilters = new HashSet<>();
+
         stage.setScene(this.scene);
         stage.setTitle(STAGE_TITLE);
         stage.show();
@@ -78,7 +82,7 @@ public class NoteTrackerUI extends Application {
         this.borderPane = borderPane;
 
         borderPane.setCenter(assembleCardViewing());
-        borderPane.setLeft(assembleCreateNote());
+        borderPane.setLeft(assembleStartNote());
         borderPane.setRight(assembleFilterOptions());
 
         Scene scene = new Scene(borderPane, WIN_WIDTH, WIN_HEIGHT);
@@ -104,42 +108,92 @@ public class NoteTrackerUI extends Application {
         return tile;
     }
 
-    private VBox assembleCreateNote() {
+    private VBox assembleStartNote() {
         VBox vBox = new VBox();
+        VBox inputElementHolder = new VBox();
+        inputElementHolder.setId(INPUTS_HOLDER_ID);
 
-        Button beginNoteCreation = new Button(BEGIN_NOTE);
-        Button createNote = new Button(CREATE_NOTE);
-        createNote.setId(CREATE_NOTE_ID);
-        createNote.setOnAction(event -> {});
+        Label header = new Label("Create Note");
+        Label typeHeader = new Label("Note Type");
 
-        beginNoteCreation.getStyleClass().add(BUTTON_CLASS);
-        beginNoteCreation.setId(BEGIN_NOTE_ID);
+        vBox.getChildren().addAll(
+                header,
+                typeHeader,
+                assembleTypeSelector(),
+                inputElementHolder
+        );
 
-        Label labelTitle = new Label(INPUT_TITLE);
-        TextField title = new TextField();
-        title.setPromptText(INPUT_TITLE);
+        return vBox;
+    }
 
+    private Node assembleTypeSelector() {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText(INPUT_TYPE);
         for (Notes noteType : Notes.values()) {
             comboBox.getItems().add(noteType.name());
         }
 
-        Label labelDescription = new Label(INPUT_DESCRIPTION);
-        TextField description = new TextField();
-        description.setPromptText(INPUT_DESCRIPTION);
+        comboBox.setOnAction(event -> {
+            inputValues.clear();
+            inputValues.put(NoteInputType.CARD_TYPE, comboBox.getValue());
+            assembleNoteOptions(Notes.valueOf(comboBox.getValue()));
+        });
+
+        return comboBox;
+    }
+
+    private void assembleNoteOptions(Notes noteType) {
+        Button createNote = new Button(CREATE_NOTE);
+        createNote.setId(CREATE_NOTE_ID);
+        createNote.setOnAction(event -> {});
+
+        VBox title = createInputElement(INPUT_TITLE_LABEL, NoteInputType.HEADER);
+        VBox description = createInputElement(INPUT_DESCRIPTION_LABEL, NoteInputType.CONTENT);
+        VBox author = createInputElement("Author", NoteInputType.AUTHOR);
+        VBox list = createToDoInput();
+
+        VBox vBox = (VBox) getElement(INPUTS_HOLDER_ID);
+        vBox.getChildren().clear();
 
         vBox.getChildren().addAll(
-                beginNoteCreation,
-                labelTitle,
                 title,
-                comboBox,
-                labelDescription,
-                description,
-                createNote
+                description
         );
 
-        return vBox;
+        if (noteType == Notes.QUOTATION) {
+            vBox.getChildren().add(author);
+        }
+
+        if (noteType == Notes.TO_DO) {
+            vBox.getChildren().add(list);
+        }
+
+        vBox.getChildren().add(createNote);
+    }
+
+    private VBox createInputElement(String labelText, NoteInputType type) {
+        Label label = new Label(labelText);
+
+        TextField inputElement = new TextField();
+        inputElement.setPromptText(labelText);
+
+        inputElement.setOnAction(value -> {
+            inputValues.put(type, inputElement.getText());
+        });
+
+        return new VBox(label, inputElement);
+    }
+
+    private VBox createToDoInput() {
+        VBox elements = new VBox();
+
+        TextField textField = new TextField();
+        textField.setPromptText("Enter item to do...");
+
+        Button addItemInput = new Button("Add another item");
+        elements.getChildren().addAll(textField, addItemInput);
+
+        return elements;
     }
 
     private VBox assembleFilterOptions() {
@@ -147,39 +201,51 @@ public class NoteTrackerUI extends Application {
         vBox.getChildren().add(new Label(FILTER_LABEL));
 
         for (Notes noteType : Notes.values()) {
-            vBox.getChildren().add(new CheckBox(noteType.name()));
+            CheckBox sortSelector = new CheckBox(noteType.name());
+
+            sortSelector.setOnAction(event -> {
+                handleFilterClick(sortSelector, noteType);
+            });
+
+            vBox.getChildren().add(sortSelector);
         }
 
         return vBox;
     }
 
-    /**
-     * Pulls all data from view that has been input
-     * @return Map of all data entered
-     */
-    public Map<NoteInputType, String> getInputData() {
-        HashMap<NoteInputType, String> data = new HashMap<>();
+    private void handleFilterClick(CheckBox box, Notes noteType) {
+        if (box.isSelected()) {
+            currentFilters.add(noteType);
+        } else {
+            currentFilters.remove(noteType);
+        }
 
-        @SuppressWarnings("unchecked")
-        ComboBox<String> comboBox = (ComboBox<String>) this.scene.lookup(String.format("#%s", INPUT_TYPE_ID));
-        data.put(NoteInputType.CARD_TYPE, comboBox.getValue());
+        updateNotes(notesForCurrentFilters());
+    }
 
-        TextField title = (TextField) this.scene.lookup(String.format("#%s", INPUT_TITLE_ID));
-        data.put(NoteInputType.HEADER, title.getText());
+    private List<INote> notesForCurrentFilters() {
+        List<INote> result = new ArrayList<>();
 
-        TextField description = (TextField) this.scene.lookup(String.format("#%s", INPUT_DESCRIPTION_ID));
-        data.put(NoteInputType.CONTENT, description.getText());
+        if (currentFilters.isEmpty()) {
+            return controller.getNotes();
+        }
 
-        return data;
+        for (Notes note : currentFilters) {
+            result.addAll(controller.getNotes(note));
+        }
+
+        return result;
     }
 
     private void updateNotes(List<INote> notes) {
-        TilePane tile = (TilePane) this.scene.lookup(String.format("#%s", TILEPANE_ID));
+        TilePane tile = (TilePane) getElement(TILEPANE_ID);
 
         NoteFactory factory = new NoteFactory();
+        tile.getChildren().clear();
 
         for (INote note : notes) {
             HBox hBox = factory.getNoteFor(note.getType()).createSampleView(note);
+            hBox.getStyleClass().add(CARD_CLASS);
             tile.getChildren().add(hBox);
         }
     }
@@ -191,5 +257,9 @@ public class NoteTrackerUI extends Application {
                 ", borderPane=" + borderPane +
                 ", scene=" + scene +
                 '}';
+    }
+
+    private Node getElement(String elementId) {
+        return this.scene.lookup(String.format("#%s", elementId));
     }
 }

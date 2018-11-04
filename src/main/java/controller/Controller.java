@@ -1,19 +1,13 @@
 package controller;
 
 import javafx.application.Application;
-import model.CodeBlock;
-import model.INote;
-import model.Notes;
-import model.Quotation;
+import model.*;
 import model.database.DBData;
 import model.database.INoteCRUD;
 import views.NoteInputType;
 import views.NoteTrackerUI;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Controller {
     private INoteCRUD model;
@@ -24,30 +18,39 @@ public class Controller {
         model = new DBData();
     }
 
-    private void createNoteFromUI() {
-        Map<NoteInputType, String> inputValues = ui.getInputData();
-
+    public void createNoteFromUI(Map<NoteInputType, String> inputValues) {
         String cardType = inputValues.get(NoteInputType.CARD_TYPE);
         Notes cardTypeAsEnum = Notes.valueOf(cardType);
 
         INote result = null;
-        String currentTime = Long.toString(Calendar.getInstance().getTimeInMillis());
-
-        if (cardTypeAsEnum == Notes.QUOTATION) {
-            result = new Quotation(
-                    inputValues.get(NoteInputType.HEADER),
-                    inputValues.get(NoteInputType.CONTENT),
-                    "Hard_Type_Value",
-                    "");
-        } else if (cardTypeAsEnum == Notes.CODE_BLOCK) {
-            result = new CodeBlock(
-                    inputValues.get(NoteInputType.HEADER),
-                    "",
-                    inputValues.get(NoteInputType.CONTENT));
-        }
-
-        if (result == null) {
-            throw new IllegalStateException("Current card type not supported");
+        switch (cardTypeAsEnum) {
+            case QUOTATION:
+                result = new Quotation(
+                        inputValues.get(NoteInputType.HEADER),
+                        inputValues.get(NoteInputType.CONTENT),
+                        inputValues.get(NoteInputType.AUTHOR),
+                        "");
+                break;
+            case CODE_BLOCK:
+                result = new CodeBlock(
+                        inputValues.get(NoteInputType.HEADER),
+                        "",
+                        inputValues.get(NoteInputType.CONTENT));
+                break;
+            case WEBLINK:
+                result = new WebLink(
+                        inputValues.get(NoteInputType.HEADER),
+                        "",
+                        inputValues.get(NoteInputType.CONTENT));
+                break;
+            case TO_DO:
+                List<ToDoItem> toDoItems = new ArrayList<>();
+                result = new ToDo(
+                        inputValues.get(NoteInputType.HEADER),
+                        "",
+                        toDoItems
+                );
+                break;
         }
 
         model.addNote(result);

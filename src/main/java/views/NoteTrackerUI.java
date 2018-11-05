@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.INote;
 import model.Notes;
@@ -30,6 +31,8 @@ public class NoteTrackerUI extends Application {
     private static final String BEGIN_NOTE = "+ Note";
     private static final String BEGIN_NOTE_ID = "create";
 
+    private static final String LEFT_COLUMN_CONTENT = "left_column";
+
     private static final String TYPE_HOLDER_ID = "type_holder_id";
     private static final String INPUTS_HOLDER_ID = "input_holder_id";
 
@@ -52,6 +55,7 @@ public class NoteTrackerUI extends Application {
     private static final String CARD_CLASS = "card";
     private static final String HEADER_CLASS = "header";
     private static final String DESCRIPTION_CLASS = "describe";
+    private static final String LABEL_CLASS = "label";
 
     private static final String FILTER_LABEL = "Filter";
 
@@ -85,6 +89,8 @@ public class NoteTrackerUI extends Application {
         borderPane.setLeft(assembleStartNote());
         borderPane.setRight(assembleFilterOptions());
 
+        borderPane.getStyleClass().add("borderpane");
+
         Scene scene = new Scene(borderPane, WIN_WIDTH, WIN_HEIGHT);
 
         scene.getStylesheets().add(
@@ -114,7 +120,10 @@ public class NoteTrackerUI extends Application {
         inputElementHolder.setId(INPUTS_HOLDER_ID);
 
         Label header = new Label("Create Note");
+        header.getStyleClass().add(HEADER_CLASS);
+
         Label typeHeader = new Label("Note Type");
+        typeHeader.getStyleClass().add(LABEL_CLASS);
 
         vBox.getChildren().addAll(
                 header,
@@ -122,6 +131,8 @@ public class NoteTrackerUI extends Application {
                 assembleTypeSelector(),
                 inputElementHolder
         );
+
+        vBox.setId(LEFT_COLUMN_CONTENT);
 
         return vBox;
     }
@@ -144,7 +155,7 @@ public class NoteTrackerUI extends Application {
 
     private void assembleNoteOptions(Notes noteType) {
         Button createNote = new Button(CREATE_NOTE);
-        createNote.setId(CREATE_NOTE_ID);
+        createNote.getStyleClass().add(BUTTON_CLASS);
         createNote.setOnAction(event -> {});
 
         VBox title = createInputElement(INPUT_TITLE_LABEL, NoteInputType.HEADER);
@@ -173,6 +184,7 @@ public class NoteTrackerUI extends Application {
 
     private VBox createInputElement(String labelText, NoteInputType type) {
         Label label = new Label(labelText);
+        label.getStyleClass().add(LABEL_CLASS);
 
         TextField inputElement = new TextField();
         inputElement.setPromptText(labelText);
@@ -198,7 +210,11 @@ public class NoteTrackerUI extends Application {
 
     private VBox assembleFilterOptions() {
         VBox vBox = new VBox();
-        vBox.getChildren().add(new Label(FILTER_LABEL));
+
+        Label filterLabel = new Label(FILTER_LABEL);
+        filterLabel.getStyleClass().add(HEADER_CLASS);
+
+        vBox.getChildren().add(filterLabel);
 
         for (Notes noteType : Notes.values()) {
             CheckBox sortSelector = new CheckBox(noteType.name());
@@ -244,10 +260,20 @@ public class NoteTrackerUI extends Application {
         tile.getChildren().clear();
 
         for (INote note : notes) {
-            HBox hBox = factory.getNoteFor(note.getType()).createSampleView(note);
-            hBox.getStyleClass().add(CARD_CLASS);
+            INoteCreator creator = factory.getNoteFor(note.getType());
+            HBox hBox = creator.createSampleView(note);
+            hBox.getStyleClass().addAll(CARD_CLASS);
+
+            hBox.setOnMouseClicked(event -> {
+                assembleModal(creator.createExpandedView(note));
+            });
+
             tile.getChildren().add(hBox);
         }
+    }
+
+    private void assembleModal(VBox content) {
+
     }
 
     @Override

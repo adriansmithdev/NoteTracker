@@ -23,25 +23,16 @@ public class NoteTrackerUI extends Application {
     private static final int WIN_WIDTH = 700;
 
     private static final String STAGE_TITLE = "Notes";
-
     private static final String CSS_SHEET = "NoteTrackerUI.css";
 
-    private static final String TILEPANE_ID = "tile-pane";
-
-    private static final String BEGIN_NOTE = "+ Note";
-    private static final String BEGIN_NOTE_ID = "create";
-
-    private static final String LEFT_COLUMN_CONTENT = "left_column";
-
-    private static final String TYPE_HOLDER_ID = "type_holder_id";
-    private static final String INPUTS_HOLDER_ID = "input_holder_id";
-
-    private static final String CREATE_NOTE = "Create";
-    private static final String CREATE_NOTE_ID = "complete-note";
+    private static final String INPUT_TYPE = "Card Type";
+    private static final String[] labels_codeblock = {"Title", "Code"};
+    private static final String[] labels_quote = {"Title", "Quote", "Author"};
+    private static final String[] labels_todo = {"Title", "List"};
+    private static final String[] labels_weblink = {"Title", "Link"};
 
     private static final String INPUT_TITLE_LABEL = "Title";
     private static final String INPUT_TITLE_ID = "title_id";
-    private static final String INPUT_TYPE = "Card Type";
     private static final String INPUT_TYPE_ID = "type_id";
     private static final String INPUT_DESCRIPTION_LABEL = "Description";
     private static final String INPUT_DESCRIPTION_ID = "description_id";
@@ -109,7 +100,7 @@ public class NoteTrackerUI extends Application {
         tile.setVgap(CARD_GAP);
         tile.setPrefColumns(PREF_COLUMNS);
         tile.setMaxWidth(Region.USE_PREF_SIZE);
-        tile.setId(TILEPANE_ID);
+        tile.setId("tile-pane");
 
         return tile;
     }
@@ -117,7 +108,7 @@ public class NoteTrackerUI extends Application {
     private VBox assembleStartNote() {
         VBox vBox = new VBox();
         VBox inputElementHolder = new VBox();
-        inputElementHolder.setId(INPUTS_HOLDER_ID);
+        inputElementHolder.setId("input_holder_id");
 
         Label header = new Label("Create Note");
         header.getStyleClass().add(HEADER_CLASS);
@@ -132,7 +123,7 @@ public class NoteTrackerUI extends Application {
                 inputElementHolder
         );
 
-        vBox.setId(LEFT_COLUMN_CONTENT);
+        vBox.setId("left_column");
 
         return vBox;
     }
@@ -154,7 +145,7 @@ public class NoteTrackerUI extends Application {
     }
 
     private void assembleNoteOptions(Notes noteType) {
-        Button createNote = new Button(CREATE_NOTE);
+        Button createNote = new Button("Create");
         createNote.getStyleClass().add(BUTTON_CLASS);
         createNote.setOnAction(event -> {});
 
@@ -163,7 +154,7 @@ public class NoteTrackerUI extends Application {
         VBox author = createInputElement("Author", NoteInputType.AUTHOR);
         VBox list = createToDoInput();
 
-        VBox vBox = (VBox) getElement(INPUTS_HOLDER_ID);
+        VBox vBox = (VBox) getElement("input_holder_id");
         vBox.getChildren().clear();
 
         vBox.getChildren().addAll(
@@ -254,7 +245,7 @@ public class NoteTrackerUI extends Application {
     }
 
     private void updateNotes(List<INote> notes) {
-        TilePane tile = (TilePane) getElement(TILEPANE_ID);
+        TilePane tile = (TilePane) getElement("tile-pane");
 
         NoteFactory factory = new NoteFactory();
         tile.getChildren().clear();

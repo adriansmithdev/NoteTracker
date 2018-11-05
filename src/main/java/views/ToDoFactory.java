@@ -8,6 +8,7 @@ import model.INote;
 import model.ToDo;
 import model.ToDoItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoFactory implements INoteCreator  {
@@ -43,5 +44,13 @@ public class ToDoFactory implements INoteCreator  {
         toDoView.getChildren().addAll(toDoBoxes);
 
         return toDoView;
+    }
+
+    @Override
+    public List<String> getLabels() {
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Title");
+        result.add("List");
+        return result;
     }
 }

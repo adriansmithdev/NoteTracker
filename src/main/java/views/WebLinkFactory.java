@@ -7,6 +7,9 @@ import javafx.scene.text.Text;
 import model.INote;
 import model.WebLink;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WebLinkFactory implements INoteCreator  {
     @Override
     public HBox createSampleView(INote note) {
@@ -31,5 +34,13 @@ public class WebLinkFactory implements INoteCreator  {
         linkView.getChildren().addAll(title, hyperlink);
 
         return linkView;
+    }
+
+    @Override
+    public List<String> getLabels() {
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Title");
+        result.add("URL");
+        return result;
     }
 }

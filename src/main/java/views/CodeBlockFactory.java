@@ -7,6 +7,9 @@ import javafx.scene.text.Text;
 import model.CodeBlock;
 import model.INote;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CodeBlockFactory implements INoteCreator {
 
     @Override
@@ -36,5 +39,12 @@ public class CodeBlockFactory implements INoteCreator {
         return expandedInfoView;
     }
 
+    @Override
+    public List<String> getLabels() {
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Title");
+        result.add("Code");
+        return result;
+    }
 
 }

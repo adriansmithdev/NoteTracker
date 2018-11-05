@@ -26,18 +26,6 @@ public class NoteTrackerUI extends Application {
     private static final String CSS_SHEET = "NoteTrackerUI.css";
 
     private static final String INPUT_TYPE = "Card Type";
-    private static final String[] labels_codeblock = {"Title", "Code"};
-    private static final String[] labels_quote = {"Title", "Quote", "Author"};
-    private static final String[] labels_todo = {"Title", "List"};
-    private static final String[] labels_weblink = {"Title", "Link"};
-
-    private static final String INPUT_TITLE_LABEL = "Title";
-    private static final String INPUT_TITLE_ID = "title_id";
-    private static final String INPUT_TYPE_ID = "type_id";
-    private static final String INPUT_DESCRIPTION_LABEL = "Description";
-    private static final String INPUT_DESCRIPTION_ID = "description_id";
-    private static final String INPUT_AUTHOR_LABEL = "Author";
-    private static final String INPUT_AUTHOR_ID = "author_id";
 
     private static final int CARD_GAP = 8;
     private static final int PREF_COLUMNS = 3;
@@ -49,16 +37,17 @@ public class NoteTrackerUI extends Application {
     private static final String LABEL_CLASS = "label";
 
     private static final String FILTER_LABEL = "Filter";
+    public static final double ANCHOR_DISTANCE = 10.0;
 
     private Stage stage;
     private BorderPane borderPane;
     private Scene scene;
     private Controller controller;
-    private Map<NoteInputType, String> inputValues;
+    private Map<String, String> inputValues;
     private Set<Notes> currentFilters;
 
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage) {
         controller = new Controller();
         this.stage = stage;
         this.scene = assembleScene();
@@ -71,8 +60,7 @@ public class NoteTrackerUI extends Application {
         updateNotes(controller.getNotes());
     }
 
-    private Scene assembleScene()
-    {
+    private Scene assembleScene() {
         BorderPane borderPane = new BorderPane();
         this.borderPane = borderPane;
 
@@ -137,7 +125,7 @@ public class NoteTrackerUI extends Application {
 
         comboBox.setOnAction(event -> {
             inputValues.clear();
-            inputValues.put(NoteInputType.CARD_TYPE, comboBox.getValue());
+            inputValues.put("CardType", comboBox.getValue());
             assembleNoteOptions(Notes.valueOf(comboBox.getValue()));
         });
 
@@ -147,33 +135,24 @@ public class NoteTrackerUI extends Application {
     private void assembleNoteOptions(Notes noteType) {
         Button createNote = new Button("Create");
         createNote.getStyleClass().add(BUTTON_CLASS);
-        createNote.setOnAction(event -> {});
+        createNote.setOnAction(event -> {
 
-        VBox title = createInputElement(INPUT_TITLE_LABEL, NoteInputType.HEADER);
-        VBox description = createInputElement(INPUT_DESCRIPTION_LABEL, NoteInputType.CONTENT);
-        VBox author = createInputElement("Author", NoteInputType.AUTHOR);
-        VBox list = createToDoInput();
+        });
 
         VBox vBox = (VBox) getElement("input_holder_id");
         vBox.getChildren().clear();
 
-        vBox.getChildren().addAll(
-                title,
-                description
-        );
-
-        if (noteType == Notes.QUOTATION) {
-            vBox.getChildren().add(author);
+        for (String label : new NoteFactory().getNoteFor(noteType).getLabels()) {
+            VBox element = createInputElement(label);
+            vBox.getChildren().add(element);
         }
 
-        if (noteType == Notes.TO_DO) {
-            vBox.getChildren().add(list);
-        }
+        VBox list = createToDoInput();
 
         vBox.getChildren().add(createNote);
     }
 
-    private VBox createInputElement(String labelText, NoteInputType type) {
+    private VBox createInputElement(String labelText) {
         Label label = new Label(labelText);
         label.getStyleClass().add(LABEL_CLASS);
 
@@ -181,7 +160,7 @@ public class NoteTrackerUI extends Application {
         inputElement.setPromptText(labelText);
 
         inputElement.setOnAction(value -> {
-            inputValues.put(type, inputElement.getText());
+            inputValues.put(labelText, inputElement.getText());
         });
 
         return new VBox(label, inputElement);
@@ -255,9 +234,7 @@ public class NoteTrackerUI extends Application {
             HBox hBox = creator.createSampleView(note);
             hBox.getStyleClass().addAll(CARD_CLASS);
 
-            hBox.setOnMouseClicked(event -> {
-                assembleModal(creator.createExpandedView(note));
-            });
+            hBox.setOnMouseClicked(event -> assembleModal(creator.createExpandedView(note)));
 
             tile.getChildren().add(hBox);
         }
@@ -265,12 +242,19 @@ public class NoteTrackerUI extends Application {
 
     private void assembleModal(VBox content) {
         AnchorPane anchorPane = new AnchorPane();
-        anchorPane.getChildren().add(content);
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(content);
+        anchorPane.getChildren().add(scrollPane);
+        AnchorPane.setTopAnchor(scrollPane, ANCHOR_DISTANCE);
+        AnchorPane.setLeftAnchor(scrollPane, ANCHOR_DISTANCE);
+        AnchorPane.setRightAnchor(scrollPane, ANCHOR_DISTANCE);
 
         Button backButton = new Button("Back");
+        backButton.setOnAction(event -> stage.setScene(scene));
         anchorPane.getChildren().add(backButton);
-        AnchorPane.setLeftAnchor(backButton, 10.0);
-        AnchorPane.setBottomAnchor(backButton, 10.0);
+        AnchorPane.setLeftAnchor(backButton, ANCHOR_DISTANCE);
+        AnchorPane.setBottomAnchor(backButton, ANCHOR_DISTANCE);
 
         stage.setScene(new Scene(anchorPane, WIN_WIDTH, WIN_HEIGHT));
     }

@@ -7,6 +7,9 @@ import javafx.scene.text.Text;
 import model.INote;
 import model.Quotation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuoteFactory implements INoteCreator {
 
     @Override
@@ -35,5 +38,14 @@ public class QuoteFactory implements INoteCreator {
         expandedView.getChildren().addAll(title, dateCreated, completeNote);
 
         return expandedView;
+    }
+
+    @Override
+    public List<String> getLabels() {
+        ArrayList<String> result = new ArrayList<>();
+        result.add("Title");
+        result.add("Quote");
+        result.add("Author");
+        return result;
     }
 }

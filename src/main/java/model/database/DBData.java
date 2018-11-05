@@ -8,6 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class DBData implements INoteCRUD {
 
     private Connection conn;
@@ -15,6 +21,9 @@ public class DBData implements INoteCRUD {
     private static Map<Notes, String> notesToTableMap = new HashMap<>();
 
 
+    /**
+     * Constructs DBData object by instantiation Connection object to connect to database.
+     */
     public DBData()
     {
         try {
@@ -37,21 +46,22 @@ public class DBData implements INoteCRUD {
     @Override
     public void createNote(INote note)
     {
-        if (note.getType() == Notes.QUOTATION)
+        if (note.getType() == Notes.QUOTATION) {
             createQuote(note);
-        else if (note.getType() == Notes.CODE_BLOCK)
+        } else if (note.getType() == Notes.CODE_BLOCK) {
             createCodeBlock(note);
-        else if(note.getType() == Notes.WEBLINK)
+        } else if (note.getType() == Notes.WEBLINK) {
             createWebLink(note);
-        else if(note.getType() == Notes.TO_DO)
+        } else if (note.getType() == Notes.TO_DO) {
             createToDoList(note);
+        }
     }
 
     private void createWebLink(INote note)
     {
         WebLink link = (WebLink) note;
 
-        try{
+        try {
             Statement stmt = conn.createStatement();
             stmt.execute("INSERT INTO WebLinksTable VALUES(DATETIME('now'), '" +
                     link.getTitle() + "', '" +
@@ -66,7 +76,7 @@ public class DBData implements INoteCRUD {
     {
         ToDo toDo = (ToDo) note;
 
-        try{
+        try {
             Statement stmt = conn.createStatement();
             stmt.execute("INSERT INTO ToDoListTable VALUES(DATETIME('now'), '" +
                     toDo.getTitle() + "', null)");
@@ -75,10 +85,10 @@ public class DBData implements INoteCRUD {
             listIDs.next();
             int listID = listIDs.getInt(1);
 
-            for(ToDoItem task : toDo.getToDoItems()) {
+            for (ToDoItem task : toDo.getToDoItems()) {
                 stmt = conn.createStatement();
                 int isCompleted = task.isCompleted() ? 1 : 0;
-                stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", '"+
+                stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", '" +
                         task.getToDo() + "', " +
                         isCompleted + ")");
             }
@@ -174,11 +184,11 @@ public class DBData implements INoteCRUD {
         ResultSet results = stmt.executeQuery("SELECT ListID FROM ToDoListTable " +
                 "WHERE DateCreated = '" + toDo.getDateCreated() + "'");
 
-        while(results.next()){
+        while (results.next()) {
             int listID = results.getInt("ListID");
             stmt.execute("DELETE FROM ToDoItemsTable WHERE ListID = " + listID);
 
-            for(ToDoItem task : toDo.getToDoItems()){
+            for (ToDoItem task : toDo.getToDoItems()) {
                 int isCompleted = task.isCompleted() ? 1 : 0;
                 stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", '" +
                         task.getToDo() + "', " +
@@ -231,15 +241,16 @@ public class DBData implements INoteCRUD {
         return noteList;
     }
 
+    @Override
     public List<INote> getNotes(Notes typeOfNote)
     {
         List<INote> notes = new ArrayList<>();
         try {
-            if (typeOfNote == Notes.QUOTATION)
+            if (typeOfNote == Notes.QUOTATION) {
                 addQuotesToList(notes);
-            else if (typeOfNote == Notes.CODE_BLOCK)
+            } else if (typeOfNote == Notes.CODE_BLOCK) {
                 addCodeBlocksToList(notes);
-            else if (typeOfNote == Notes.TO_DO) {
+            } else if (typeOfNote == Notes.TO_DO) {
                 addToDosToList(notes);
             } else if (typeOfNote == Notes.WEBLINK) {
                 addWebLinksToList(notes);
@@ -290,9 +301,9 @@ public class DBData implements INoteCRUD {
 
         while (results.next()) //move to the next row and return true if successful
         {
-            int id = results.getInt("ListID");
+            int listID = results.getInt("ListID");
             ResultSet toDoResults = conn.createStatement().executeQuery(
-                    "SELECT ToDo, isCompleted FROM ToDoItemsTable WHERE ListID = " + id + ";"
+                    "SELECT ToDo, isCompleted FROM ToDoItemsTable WHERE ListID = " + listID + ";"
             );
 
             List<ToDoItem> individualToDoItems = new ArrayList<>();
@@ -329,5 +340,13 @@ public class DBData implements INoteCRUD {
             );
             listOfNotes.add(note);
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "DBData{" +
+                "conn=" + conn +
+                '}';
     }
 }

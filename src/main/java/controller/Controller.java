@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.application.Application;
 import model.*;
 import model.database.DBData;
 import model.database.INoteCRUD;
@@ -53,12 +52,12 @@ public class Controller {
                 break;
         }
 
-        model.addNote(result);
+        model.createNote(result);
     }
 
     public void addNote(INote note)
     {
-        model.addNote(note);
+        model.createNote(note);
     }
 
     public void addNote(Map<NoteInputType, String> inputValues) {

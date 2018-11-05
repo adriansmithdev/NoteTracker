@@ -35,15 +35,48 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public void addNote(INote note)
+    public void createNote(INote note)
     {
         if (note.getType() == Notes.QUOTATION)
-            addNoteToQuotesTable(note);
+            createQuote(note);
         else if (note.getType() == Notes.CODE_BLOCK)
-            addNoteToCodeBlocksTable(note);
+            createCodeBlock(note);
+        else if(note.getType() == Notes.WEBLINK)
+            createWebLink(note);
+        else if(note.getType() == Notes.TO_DO)
+            createToDoList(note);
     }
 
-    private void addNoteToCodeBlocksTable(INote note)
+    private void createWebLink(INote note)
+    {
+        WebLink link = (WebLink) note;
+
+        try{
+            Statement stmt = conn.createStatement();
+            stmt.execute("INSERT INTO WebLinksTable VALUES(DATETIME('now'), '" +
+                    link.getTitle() + "', '" +
+                    link.getURL() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void createToDoList(INote note)
+    {
+        ToDo toDo = (ToDo) note;
+
+        try{
+            Statement stmt = conn.createStatement();
+            stmt.execute("INSERT INTO ToDoListTable VALUES(DATETIME('now'), '" +
+                    toDo.getTitle() + "')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void createCodeBlock(INote note)
     {
         CodeBlock quote = (CodeBlock) note;
 
@@ -57,7 +90,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void addNoteToQuotesTable(INote note)
+    private void createQuote(INote note)
     {
         Quotation quote = (Quotation) note;
 

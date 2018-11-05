@@ -252,7 +252,7 @@ public class NoteTrackerUI extends Application {
 
         Button backButton = new Button("Back");
         backButton.setOnAction(event -> {
-            controller.update(note);
+            controller.updateNote(note);
             stage.setScene(scene);
         });
         anchorPane.getChildren().add(backButton);

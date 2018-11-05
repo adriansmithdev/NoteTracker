@@ -77,9 +77,10 @@ public class DBData implements INoteCRUD {
 
             for(ToDoItem task : toDo.getToDoItems()) {
                 stmt = conn.createStatement();
-                stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", "+
-                        task.getToDo() + ", " +
-                        task.isCompleted() + ")");
+                int isCompleted = task.isCompleted() ? 1 : 0;
+                stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", '"+
+                        task.getToDo() + "', " +
+                        isCompleted + ")");
             }
 
         } catch (SQLException e) {
@@ -132,7 +133,7 @@ public class DBData implements INoteCRUD {
     private void removeNoteFromTable(INote note, String table) throws SQLException
     {
         Statement stmt = conn.createStatement();
-        stmt.execute("DELETE FROM " + table + " WHERE DateCreated = " + note.getDateCreated());
+        stmt.execute("DELETE FROM " + table + " WHERE DateCreated = '" + note.getDateCreated() + "'");
     }
 
     @Override
@@ -159,9 +160,9 @@ public class DBData implements INoteCRUD {
 
         Statement stmt = conn.createStatement();
 
-        stmt.execute("UPDATE WebLinksTable SET Title = " + link.getTitle() + ", " +
-                "URL = " + link.getURL() +
-                "WHERE DateCreated = " + link.getDateCreated());
+        stmt.execute("UPDATE WebLinksTable SET Title = '" + link.getTitle() + "', " +
+                "URL = '" + link.getURL() +
+                "' WHERE DateCreated = '" + link.getDateCreated() + "'");
     }
 
     private void updateToDoList(INote note) throws SQLException
@@ -171,16 +172,17 @@ public class DBData implements INoteCRUD {
         Statement stmt = conn.createStatement();
 
         ResultSet results = stmt.executeQuery("SELECT ListID FROM ToDoListTable " +
-                "WHERE DateCreated = " + toDo.getDateCreated());
+                "WHERE DateCreated = '" + toDo.getDateCreated() + "'");
 
         while(results.next()){
             int listID = results.getInt("ListID");
             stmt.execute("DELETE FROM ToDoItemsTable WHERE ListID = " + listID);
 
             for(ToDoItem task : toDo.getToDoItems()){
-                stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", " +
-                        task.getToDo() + ", " +
-                        task.isCompleted() + ")");
+                int isCompleted = task.isCompleted() ? 1 : 0;
+                stmt.execute("INSERT INTO ToDoItemsTable VALUES(" + listID + ", '" +
+                        task.getToDo() + "', " +
+                        isCompleted + ")");
             }
         }
     }
@@ -192,9 +194,9 @@ public class DBData implements INoteCRUD {
 
         Statement stmt = conn.createStatement();
 
-        stmt.execute("UPDATE CodeBlocksTable SET Title = " + codeBlock.getTitle() + ", " +
-                "Code = " + codeBlock.getCode() +
-                "WHERE DateCreated = " + codeBlock.getDateCreated());
+        stmt.execute("UPDATE CodeBlocksTable SET Title = '" + codeBlock.getTitle() + "', " +
+                "Code = '" + codeBlock.getCode() +
+                "' WHERE DateCreated = '" + codeBlock.getDateCreated() + "'");
     }
 
     private void updateQuote(INote note) throws SQLException
@@ -203,10 +205,10 @@ public class DBData implements INoteCRUD {
 
         Statement stmt = conn.createStatement();
 
-        stmt.execute("UPDATE QuotesTable SET Title = " + quote.getTitle() + ", " +
-                "Quote = " + quote.getQuote() + ", " +
-                "Author = " + quote.getAuthor() + ", " +
-                "WHERE DateCreated = " + quote.getDateCreated());
+        stmt.execute("UPDATE QuotesTable SET Title = '" + quote.getTitle() + "', " +
+                "Quote = '" + quote.getQuote() + "', " +
+                "Author = '" + quote.getAuthor() + "', " +
+                "WHERE DateCreated = '" + quote.getDateCreated() + "'");
     }
 
     @Override
@@ -219,7 +221,7 @@ public class DBData implements INoteCRUD {
             addCodeBlocksToList(noteList);
             addWebLinksToList(noteList);
             addToDosToList(noteList);
-            noteList.sort(new SortByDateTime()); //TODO verify that SortByDateTime is correct
+            noteList.sort(new SortByDateTime());
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot retrieve note: " + e.getMessage());
         }

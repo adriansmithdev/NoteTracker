@@ -78,4 +78,9 @@ public class Controller {
     {
         return model.removeNote(note);
     }
+
+    public void updateNote(INote note)
+    {
+        model.updateNote(note);
+    }
 }

@@ -3,10 +3,16 @@
     -fx-text-fill: white;
     -fx-start-margin: 10;
     -fx-end-margin: 10;
+    -fx-pref-width: 250;
 }
 
-#create {
+#input_holder_id {
+    -fx-spacing: 5;
+}
+
+#left_column {
     -fx-pref-width: 250;
+    -fx-padding: 0 25 0 10;
 }
 
 .card {
@@ -14,13 +20,28 @@
     -fx-background-radius: 5;
     -fx-border-color: black;
     -fx-border-radius: 5;
-    -fx-pref-width: 150;
+    -fx-pref-width: 120;
+    -fx-pref-height: 120;
+    -fx-padding: 5 15 5 15;
+}
+
+.card:hover {
+    -fx-background-color: #e0e0e0;
 }
 
 .header {
-    -fx-font-size: 18;
+    -fx-font-size: 2em;
+    -fx-padding: 5 0 5 0;
+}
+
+.label {
+    -fx-padding: 2 0 2 0;
 }
 
 .describe {
     -fx-wrap-text: true;
+}
+
+.borderpane {
+    -fx-padding: 15;
 }

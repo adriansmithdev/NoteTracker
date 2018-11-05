@@ -4,5 +4,6 @@ public enum NoteInputType {
     CARD_TYPE,
     HEADER,
     CONTENT,
-    AUTHOR
+    AUTHOR,
+    ITEMS
 }

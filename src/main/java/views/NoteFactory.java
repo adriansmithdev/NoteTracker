@@ -10,6 +10,10 @@ public class NoteFactory {
                 return new CodeBlockFactory();
             case QUOTATION:
                 return new QuoteFactory();
+            case TO_DO:
+                return new ToDoFactory();
+            case WEBLINK:
+                return new WebLinkFactory();
             default:
                 return new ErrorView();
         }

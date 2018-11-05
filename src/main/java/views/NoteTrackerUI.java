@@ -136,7 +136,7 @@ public class NoteTrackerUI extends Application {
         Button createNote = new Button("Create");
         createNote.getStyleClass().add(BUTTON_CLASS);
         createNote.setOnAction(event -> {
-
+//            controller
         });
 
         VBox vBox = (VBox) getElement("input_holder_id");
@@ -234,13 +234,13 @@ public class NoteTrackerUI extends Application {
             HBox hBox = creator.createSampleView(note);
             hBox.getStyleClass().addAll(CARD_CLASS);
 
-            hBox.setOnMouseClicked(event -> assembleModal(creator.createExpandedView(note)));
+            hBox.setOnMouseClicked(event -> assembleModal(creator.createExpandedView(note), note));
 
             tile.getChildren().add(hBox);
         }
     }
 
-    private void assembleModal(VBox content) {
+    private void assembleModal(VBox content, INote note) {
         AnchorPane anchorPane = new AnchorPane();
 
         ScrollPane scrollPane = new ScrollPane();
@@ -251,7 +251,10 @@ public class NoteTrackerUI extends Application {
         AnchorPane.setRightAnchor(scrollPane, ANCHOR_DISTANCE);
 
         Button backButton = new Button("Back");
-        backButton.setOnAction(event -> stage.setScene(scene));
+        backButton.setOnAction(event -> {
+            controller.update(note);
+            stage.setScene(scene);
+        });
         anchorPane.getChildren().add(backButton);
         AnchorPane.setLeftAnchor(backButton, ANCHOR_DISTANCE);
         AnchorPane.setBottomAnchor(backButton, ANCHOR_DISTANCE);

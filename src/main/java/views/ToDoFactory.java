@@ -38,6 +38,9 @@ public class ToDoFactory implements INoteCreator  {
             ToDoItem individualToDo = listOfToDos.get(i);
             toDoBoxes[i] = new CheckBox(individualToDo.getToDo());
             toDoBoxes[i].setSelected(individualToDo.isCompleted());
+            toDoBoxes[i].selectedProperty().addListener((observable, oldValue, newValue) -> {
+                individualToDo.setCompleted(Boolean.valueOf(newValue.toString()));
+            });
         }
 
         toDoView.getChildren().add(title);

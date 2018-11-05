@@ -194,9 +194,10 @@ public class DBData implements INoteCRUD {
 
         Statement stmt = conn.createStatement();
 
-        stmt.execute("UPDATE CodeBlocksTable SET Title = '" + codeBlock.getTitle() + "', " +
-                "Code = '" + codeBlock.getCode() +
-                "' WHERE DateCreated = '" + codeBlock.getDateCreated() + "'");
+        stmt.execute("UPDATE CodeBlocksTable SET " +
+                "Title = '" + codeBlock.getTitle() + "', " +
+                "Code = '" + codeBlock.getCode() + "' " +
+                "WHERE DateCreated = '" + codeBlock.getDateCreated() + "'");
     }
 
     private void updateQuote(INote note) throws SQLException
@@ -205,9 +206,10 @@ public class DBData implements INoteCRUD {
 
         Statement stmt = conn.createStatement();
 
-        stmt.execute("UPDATE QuotesTable SET Title = '" + quote.getTitle() + "', " +
+        stmt.execute("UPDATE QuotesTable SET " +
+                "Title = '" + quote.getTitle() + "', " +
                 "Quote = '" + quote.getQuote() + "', " +
-                "Author = '" + quote.getAuthor() + "', " +
+                "Author = '" + quote.getAuthor() + "' " +
                 "WHERE DateCreated = '" + quote.getDateCreated() + "'");
     }
 

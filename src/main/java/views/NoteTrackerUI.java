@@ -264,7 +264,15 @@ public class NoteTrackerUI extends Application {
     }
 
     private void assembleModal(VBox content) {
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.getChildren().add(content);
 
+        Button backButton = new Button("Back");
+        anchorPane.getChildren().add(backButton);
+        AnchorPane.setLeftAnchor(backButton, 10.0);
+        AnchorPane.setBottomAnchor(backButton, 10.0);
+
+        stage.setScene(new Scene(anchorPane, WIN_WIDTH, WIN_HEIGHT));
     }
 
     @Override

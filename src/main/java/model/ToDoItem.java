@@ -11,12 +11,12 @@ public class ToDoItem {
     private boolean isCompleted;
 
     /**
-     * @param toDo task to be completed
+     * @param task task to be completed
      * @param isCompleted whether or not the task is completed
      */
-    public ToDoItem(String toDo, boolean isCompleted)
+    public ToDoItem(String task, boolean isCompleted)
     {
-        this.toDo = toDo;
+        this.toDo = task;
         this.isCompleted = isCompleted;
     }
 

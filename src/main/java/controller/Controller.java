@@ -13,38 +13,41 @@ public class Controller {
     private INoteCRUD model;
     private NoteTrackerUI ui;
 
-    public Controller()
-    {
+    public Controller() {
         model = new DBData();
     }
 
     public void createNoteFromUI(Map<String, String> inputValues, Notes noteType) {
         List<String> labels = new NoteFactory().getNoteFor(noteType).getLabels();
 
+        String titleLabel = labels.get(0);
+        String describerContent = labels.get(1);
+
         INote result = null;
         switch (noteType) {
             case QUOTATION:
+                String author = labels.get(2);
                 result = new Quotation(
-                        inputValues.get(labels.get(0)),
-                        inputValues.get(labels.get(1)),
-                        inputValues.get(labels.get(2)),
+                        inputValues.get(titleLabel),
+                        inputValues.get(describerContent),
+                        inputValues.get(author),
                         "");
                 break;
             case CODE_BLOCK:
                 result = new CodeBlock(
-                        inputValues.get(labels.get(0)),
+                        inputValues.get(titleLabel),
                         "",
-                        inputValues.get(labels.get(1)));
+                        inputValues.get(describerContent));
                 break;
             case WEBLINK:
                 result = new WebLink(
-                        inputValues.get(labels.get(0)),
+                        inputValues.get(titleLabel),
                         "",
-                        inputValues.get(labels.get(1)));
+                        inputValues.get(describerContent));
                 break;
             case TO_DO:
-                String header = inputValues.get(labels.get(0));
-                inputValues.remove(labels.get(0));
+                String header = inputValues.get(titleLabel);
+                inputValues.remove(titleLabel);
                 inputValues.remove("CardType");
 
                 List<ToDoItem> toDoItems = new ArrayList<>();
@@ -64,28 +67,23 @@ public class Controller {
         model.createNote(result);
     }
 
-    public void addNote(INote note)
-    {
+    public void addNote(INote note) {
         model.createNote(note);
     }
 
-    public List<INote> getNotes()
-    {
+    public List<INote> getNotes() {
         return model.getNotes();
     }
-    
-    public List<INote> getNotes(Notes typeOfNote)
-    {
+
+    public List<INote> getNotes(Notes typeOfNote) {
         return model.getNotes(typeOfNote);
     }
-    
-    public boolean removeNote(INote note)
-    {
+
+    public boolean removeNote(INote note) {
         return model.removeNote(note);
     }
 
-    public void updateNote(INote note)
-    {
+    public void updateNote(INote note) {
         model.updateNote(note);
     }
 }

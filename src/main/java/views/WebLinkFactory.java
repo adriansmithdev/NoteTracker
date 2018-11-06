@@ -1,11 +1,8 @@
 package views;
 
-import com.sun.java.swing.plaf.windows.DesktopProperty;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import model.INote;
 import model.WebLink;
 
@@ -16,6 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.Desktop;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class WebLinkFactory implements INoteCreator  {
     @Override
     public VBox createSampleView(INote note) {

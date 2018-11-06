@@ -6,7 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.INote;
 import model.Notes;
@@ -15,8 +14,9 @@ import model.SortByDateTime;
 import java.util.*;
 
 /**
- * @author Kyle, Adrian
- * @version 1
+ * @author Kyle Johnson
+ * @author Adrian Smith
+ * @version 1.0
  */
 public class NoteTrackerUI extends Application {
 
@@ -34,7 +34,6 @@ public class NoteTrackerUI extends Application {
     private static final String BUTTON_CLASS = "button-element";
     private static final String CARD_CLASS = "card";
     private static final String HEADER_CLASS = "header";
-    private static final String DESCRIPTION_CLASS = "describe";
     private static final String LABEL_CLASS = "label";
 
     private static final String FILTER_LABEL = "Filter";
@@ -44,16 +43,14 @@ public class NoteTrackerUI extends Application {
     private BorderPane borderPane;
     private Scene scene;
     private Controller controller;
-    private Map<String, String> inputValues;
-    private Set<Notes> currentFilters;
+    private Map<String, String> inputValues = new HashMap<>();
+    private Set<Notes> currentFilters = new HashSet<>();
 
     @Override
     public void start(Stage stage) {
         controller = new Controller();
         this.stage = stage;
         this.scene = assembleScene();
-        inputValues = new HashMap<>();
-        currentFilters = new HashSet<>();
 
         stage.setScene(this.scene);
         stage.setTitle(STAGE_TITLE);
@@ -186,9 +183,8 @@ public class NoteTrackerUI extends Application {
         TextField inputElement = new TextField();
         inputElement.setPromptText(labelText);
 
-        inputElement.textProperty().addListener((observable, oldValue, newValue) -> {
-            inputValues.put(labelText, newValue);
-        });
+        inputElement.textProperty().addListener((observable, oldValue, newValue) ->
+                inputValues.put(labelText, newValue));
 
         return new VBox(label, inputElement);
     }
@@ -213,10 +209,9 @@ public class NoteTrackerUI extends Application {
     private TextField createToDoRandomItem() {
         TextField textField = new TextField();
         textField.setPromptText("Enter item to do...");
-        String id = UUID.randomUUID().toString();
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            inputValues.put(id, newValue);
-        });
+        String toDoItemID = UUID.randomUUID().toString();
+        textField.textProperty().addListener((observable, oldValue, newValue) ->
+                inputValues.put(toDoItemID, newValue));
 
         return textField;
     }
@@ -232,9 +227,7 @@ public class NoteTrackerUI extends Application {
         for (Notes noteType : Notes.values()) {
             CheckBox sortSelector = new CheckBox(noteType.name());
 
-            sortSelector.setOnAction(event -> {
-                handleFilterClick(sortSelector, noteType);
-            });
+            sortSelector.setOnAction(event -> handleFilterClick(sortSelector, noteType));
 
             vBox.getChildren().add(sortSelector);
         }

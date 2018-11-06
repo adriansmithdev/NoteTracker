@@ -4,19 +4,28 @@ import model.*;
 import model.database.DBData;
 import model.database.INoteCRUD;
 import views.NoteFactory;
-import views.NoteInputType;
-import views.NoteTrackerUI;
 
 import java.util.*;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ * @version 1.0
+ */
 public class Controller {
     private INoteCRUD model;
-    private NoteTrackerUI ui;
 
+    /**
+     * just constructs by instantiating model with DBData()
+     */
     public Controller() {
         model = new DBData();
     }
 
+    /**
+     * @param inputValues user input from UI
+     * @param noteType type of note being generated
+     */
     public void createNoteFromUI(Map<String, String> inputValues, Notes noteType) {
         List<String> labels = new NoteFactory().getNoteFor(noteType).getLabels();
 
@@ -67,23 +76,33 @@ public class Controller {
         model.createNote(result);
     }
 
-    public void addNote(INote note) {
-        model.createNote(note);
-    }
-
+    /**
+     * @return List object of all notes
+     */
     public List<INote> getNotes() {
         return model.getNotes();
     }
 
+    /**
+     * @param typeOfNote type of Note being retrieved from database
+     * @return List object of type typeOfNote
+     */
     public List<INote> getNotes(Notes typeOfNote) {
         return model.getNotes(typeOfNote);
     }
 
-    public boolean removeNote(INote note) {
-        return model.removeNote(note);
-    }
-
+    /**
+     * @param note INote object being updated
+     */
     public void updateNote(INote note) {
         model.updateNote(note);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Controller{" +
+                "model=" + model +
+                '}';
     }
 }

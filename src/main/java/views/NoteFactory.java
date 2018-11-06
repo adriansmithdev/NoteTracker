@@ -2,8 +2,18 @@ package views;
 
 import model.Notes;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class NoteFactory {
 
+    /**
+     * @param noteType the type of note being generated
+     * @return INote of noteType
+     */
     public INoteCreator getNoteFor(Notes noteType) {
         switch (noteType) {
             case CODE_BLOCK:
@@ -15,7 +25,7 @@ public class NoteFactory {
             case WEBLINK:
                 return new WebLinkFactory();
             default:
-                return new ErrorView();
+                return new ErrorFactory();
         }
     }
 

@@ -1,14 +1,19 @@
 package views;
 
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.INote;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ErrorView implements INoteCreator {
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
+public class ErrorFactory implements INoteCreator {
     @Override
     public VBox createSampleView(INote note) {
         VBox vBox = new VBox();

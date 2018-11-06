@@ -2,7 +2,6 @@ package views;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.INote;
 import model.ToDo;
@@ -11,6 +10,12 @@ import model.ToDoItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class ToDoFactory implements INoteCreator  {
     @Override
     public VBox createSampleView(INote note) {
@@ -48,9 +53,8 @@ public class ToDoFactory implements INoteCreator  {
             ToDoItem individualToDo = listOfToDos.get(i);
             toDoBoxes[i] = new CheckBox(individualToDo.getToDo());
             toDoBoxes[i].setSelected(individualToDo.isCompleted());
-            toDoBoxes[i].selectedProperty().addListener((observable, oldValue, newValue) -> {
-                individualToDo.setCompleted(Boolean.valueOf(newValue.toString()));
-            });
+            toDoBoxes[i].selectedProperty().addListener((observable, oldValue, newValue) ->
+                    individualToDo.setCompleted(Boolean.valueOf(newValue.toString())));
         }
 
         toDoView.getChildren().add(title);

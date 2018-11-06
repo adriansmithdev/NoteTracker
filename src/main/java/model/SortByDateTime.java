@@ -2,6 +2,12 @@ package model;
 
 import java.util.Comparator;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class SortByDateTime implements Comparator<INote> {
 
     @Override

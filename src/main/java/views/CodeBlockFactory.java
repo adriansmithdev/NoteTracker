@@ -1,7 +1,6 @@
 package views;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.CodeBlock;
@@ -10,6 +9,12 @@ import model.INote;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class CodeBlockFactory implements INoteCreator {
 
     @Override

@@ -1,7 +1,6 @@
 package views;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.INote;
@@ -10,6 +9,12 @@ import model.Quotation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Adrian Smith
+ * @author Kyle Johnson
+ *
+ * @version 1.0
+ */
 public class QuoteFactory implements INoteCreator {
 
     @Override
@@ -26,6 +31,7 @@ public class QuoteFactory implements INoteCreator {
         return noteView;
     }
 
+    @Override
     public VBox createExpandedView(INote note)
     {
         Quotation quote = (Quotation) note;

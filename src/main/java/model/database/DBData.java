@@ -286,9 +286,9 @@ public class DBData implements INoteCRUD {
         {
             Quotation note = new Quotation(
                     results.getString("title"),
-                    results.getString("DateCreated"),
                     results.getString("Quote"),
-                    results.getString("Author")
+                    results.getString("Author"),
+                    results.getString("DateCreated")
             );
             listOfNotes.add(note);
         }

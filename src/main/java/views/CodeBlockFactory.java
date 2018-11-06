@@ -18,7 +18,7 @@ public class CodeBlockFactory implements INoteCreator {
         CodeBlock codeNote = (CodeBlock) note;
 
         Label title = new Label(codeNote.getTitle());
-        Text codePreview = new Text(codeNote.getCode());
+        Label codePreview = new Label(codeNote.getCode());
 
         sampleView.getChildren().addAll(title, codePreview);
 

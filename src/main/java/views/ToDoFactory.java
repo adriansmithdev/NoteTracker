@@ -23,8 +23,12 @@ public class ToDoFactory implements INoteCreator  {
 
         if(toDoList.isListCompleted()) {
             toDoView.getStyleClass().add("completedToDo");
+            Label completedStatus = new Label("DONE");
+            toDoView.getChildren().add(completedStatus);
         }else {
             toDoView.getStyleClass().add("uncompletedToDo");
+            Label completedStatus = new Label("NOT DONE");
+            toDoView.getChildren().add(completedStatus);
         }
 
         return toDoView;

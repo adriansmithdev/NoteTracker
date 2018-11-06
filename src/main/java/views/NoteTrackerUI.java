@@ -273,12 +273,12 @@ public class NoteTrackerUI extends Application {
 
         for (INote note : notes) {
             INoteCreator creator = factory.getNoteFor(note.getType());
-            HBox hBox = creator.createSampleView(note);
-            hBox.getStyleClass().addAll(CARD_CLASS);
+            VBox vBox = creator.createSampleView(note);
+            vBox.getStyleClass().addAll(CARD_CLASS);
 
-            hBox.setOnMouseClicked(event -> assembleModal(creator.createExpandedView(note), note));
+            vBox.setOnMouseClicked(event -> assembleModal(creator.createExpandedView(note), note));
 
-            tile.getChildren().add(hBox);
+            tile.getChildren().add(vBox);
         }
     }
 

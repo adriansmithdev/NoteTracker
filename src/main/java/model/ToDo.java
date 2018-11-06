@@ -39,4 +39,14 @@ public class ToDo implements INote {
         return this.toDoItems;
     }
 
+    public boolean isListCompleted()
+    {
+        for(ToDoItem task : this.toDoItems){
+            if(!task.isCompleted()){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

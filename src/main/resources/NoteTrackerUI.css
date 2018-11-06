@@ -47,3 +47,11 @@
 .borderpane {
     -fx-padding: 15;
 }
+
+.completedToDo {
+    -fx-background-color: rgba(2, 191, 0, 0.62);
+}
+
+.uncompletedToDo {
+    -fx-background-color: rgba(132, 0, 17, 0.75);
+}

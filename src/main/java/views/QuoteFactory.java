@@ -13,10 +13,10 @@ import java.util.List;
 public class QuoteFactory implements INoteCreator {
 
     @Override
-    public HBox createSampleView(INote note)
+    public VBox createSampleView(INote note)
     {
         Quotation quote = (Quotation) note;
-        HBox noteView = new HBox();
+        VBox noteView = new VBox();
 
         Label title = new Label(quote.getTitle());
         Text quoteSample = new Text("\"" + quote.getQuote().substring(0, 10) + "...\"");

@@ -13,13 +13,19 @@ import java.util.List;
 
 public class ToDoFactory implements INoteCreator  {
     @Override
-    public HBox createSampleView(INote note) {
+    public VBox createSampleView(INote note) {
         ToDo toDoList = (ToDo) note;
-        HBox toDoView = new HBox();
+        VBox toDoView = new VBox();
 
         Label title = new Label(toDoList.getTitle() + " To-Do's");
 
         toDoView.getChildren().addAll(title);
+
+        if(toDoList.isListCompleted()) {
+            toDoView.getStyleClass().add("completedToDo");
+        }else {
+            toDoView.getStyleClass().add("uncompletedToDo");
+        }
 
         return toDoView;
     }

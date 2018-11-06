@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface INoteCreator {
-    HBox createSampleView(INote note);
+    VBox createSampleView(INote note);
     VBox createExpandedView(INote note);
     List<String> getLabels();
 }

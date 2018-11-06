@@ -13,8 +13,8 @@ import java.util.List;
 public class CodeBlockFactory implements INoteCreator {
 
     @Override
-    public HBox createSampleView(INote note) {
-        HBox sampleView = new HBox();
+    public VBox createSampleView(INote note) {
+        VBox sampleView = new VBox();
         CodeBlock codeNote = (CodeBlock) note;
 
         Label title = new Label(codeNote.getTitle());

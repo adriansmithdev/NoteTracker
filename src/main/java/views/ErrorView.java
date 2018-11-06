@@ -10,10 +10,10 @@ import java.util.List;
 
 public class ErrorView implements INoteCreator {
     @Override
-    public HBox createSampleView(INote note) {
-        HBox hBox = new HBox();
-        hBox.getChildren().add(new Button("An error occurred"));
-        return hBox;
+    public VBox createSampleView(INote note) {
+        VBox vBox = new VBox();
+        vBox.getChildren().add(new Button("An error occurred"));
+        return vBox;
     }
 
     @Override

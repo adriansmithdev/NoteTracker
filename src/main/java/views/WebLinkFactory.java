@@ -18,9 +18,9 @@ import java.awt.Desktop;
 
 public class WebLinkFactory implements INoteCreator  {
     @Override
-    public HBox createSampleView(INote note) {
+    public VBox createSampleView(INote note) {
         WebLink link = (WebLink) note;
-        HBox linkView = new HBox();
+        VBox linkView = new VBox();
 
         Label title = new Label(link.getTitle());
 

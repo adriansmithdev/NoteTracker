@@ -10,6 +10,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.INote;
 import model.Notes;
+import model.SortByDateTime;
 
 import java.util.*;
 
@@ -261,6 +262,8 @@ public class NoteTrackerUI extends Application {
         for (Notes note : currentFilters) {
             result.addAll(controller.getNotes(note));
         }
+
+        result.sort(new SortByDateTime());
 
         return result;
     }

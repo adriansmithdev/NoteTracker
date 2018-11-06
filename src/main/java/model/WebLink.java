@@ -10,7 +10,11 @@ public class WebLink implements INote {
     {
         this.title = title;
         this.dateCreated = dateCreated;
-        this.url = url;
+        if(url.startsWith("https://") || url.startsWith("http://")) {
+            this.url = url;
+        }else{
+            this.url = "https://" + url;
+        }
         this.typeOfNote = Notes.WEBLINK;
     }
 

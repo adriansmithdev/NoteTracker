@@ -130,9 +130,11 @@ public class NoteTrackerUI extends Application {
         comboBox.setId("ComboBox");
 
         comboBox.setOnAction(event -> {
-            inputValues.clear();
-            inputValues.put("CardType", comboBox.getValue());
-            assembleNoteOptions(Notes.valueOf(comboBox.getValue()));
+            if (comboBox.getValue() != null) {
+                inputValues.clear();
+                inputValues.put("CardType", comboBox.getValue());
+                assembleNoteOptions(Notes.valueOf(comboBox.getValue()));
+            }
         });
 
         return comboBox;

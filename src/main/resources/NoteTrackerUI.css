@@ -22,6 +22,8 @@
     -fx-border-radius: 5;
     -fx-pref-width: 120;
     -fx-pref-height: 120;
+    -fx-min-width: 120;
+    -fx-min-height: 120;
     -fx-padding: 5 15 5 15;
 }
 

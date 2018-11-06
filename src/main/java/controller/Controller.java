@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import model.database.DBData;
 import model.database.INoteCRUD;
+import views.NoteFactory;
 import views.NoteInputType;
 import views.NoteTrackerUI;
 
@@ -17,35 +18,43 @@ public class Controller {
         model = new DBData();
     }
 
-    public void createNoteFromUI(Map<NoteInputType, String> inputValues) {
-        String cardType = inputValues.get(NoteInputType.CARD_TYPE);
-        Notes cardTypeAsEnum = Notes.valueOf(cardType);
+    public void createNoteFromUI(Map<String, String> inputValues, Notes noteType) {
+        List<String> labels = new NoteFactory().getNoteFor(noteType).getLabels();
 
         INote result = null;
-        switch (cardTypeAsEnum) {
+        switch (noteType) {
             case QUOTATION:
                 result = new Quotation(
-                        inputValues.get(NoteInputType.HEADER),
-                        inputValues.get(NoteInputType.CONTENT),
-                        inputValues.get(NoteInputType.AUTHOR),
+                        inputValues.get(labels.get(0)),
+                        inputValues.get(labels.get(1)),
+                        inputValues.get(labels.get(2)),
                         "");
                 break;
             case CODE_BLOCK:
                 result = new CodeBlock(
-                        inputValues.get(NoteInputType.HEADER),
+                        inputValues.get(labels.get(0)),
                         "",
-                        inputValues.get(NoteInputType.CONTENT));
+                        inputValues.get(labels.get(1)));
                 break;
             case WEBLINK:
                 result = new WebLink(
-                        inputValues.get(NoteInputType.HEADER),
+                        inputValues.get(labels.get(0)),
                         "",
-                        inputValues.get(NoteInputType.CONTENT));
+                        inputValues.get(labels.get(1)));
                 break;
             case TO_DO:
+                String header = inputValues.get(labels.get(0));
+                inputValues.remove(labels.get(0));
+                inputValues.remove("CardType");
+
                 List<ToDoItem> toDoItems = new ArrayList<>();
+
+                for (String key : inputValues.keySet()) {
+                    toDoItems.add(new ToDoItem(inputValues.get(key), false));
+                }
+
                 result = new ToDo(
-                        inputValues.get(NoteInputType.HEADER),
+                        header,
                         "",
                         toDoItems
                 );
@@ -58,10 +67,6 @@ public class Controller {
     public void addNote(INote note)
     {
         model.createNote(note);
-    }
-
-    public void addNote(Map<NoteInputType, String> inputValues) {
-
     }
 
     public List<INote> getNotes()

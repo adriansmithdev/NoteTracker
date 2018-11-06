@@ -11,7 +11,7 @@ public class WebLink implements INote {
         this.title = title;
         this.dateCreated = dateCreated;
         this.url = url;
-        this.typeOfNote = Notes.TO_DO;
+        this.typeOfNote = Notes.WEBLINK;
     }
 
     @Override

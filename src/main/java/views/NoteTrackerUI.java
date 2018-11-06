@@ -82,7 +82,9 @@ public class NoteTrackerUI extends Application {
         return scene;
     }
 
-    private TilePane assembleCardViewing() {
+    private ScrollPane assembleCardViewing() {
+        ScrollPane scrollPane = new ScrollPane();
+
         TilePane tile = new TilePane();
         tile.setHgap(CARD_GAP);
         tile.setVgap(CARD_GAP);
@@ -90,7 +92,10 @@ public class NoteTrackerUI extends Application {
         tile.setMaxWidth(Region.USE_PREF_SIZE);
         tile.setId("tile-pane");
 
-        return tile;
+        scrollPane.setContent(tile);
+        scrollPane.setFitToWidth(true);
+
+        return scrollPane;
     }
 
     private VBox assembleStartNote() {
@@ -122,6 +127,7 @@ public class NoteTrackerUI extends Application {
         for (Notes noteType : Notes.values()) {
             comboBox.getItems().add(noteType.name());
         }
+        comboBox.setId("ComboBox");
 
         comboBox.setOnAction(event -> {
             inputValues.clear();
@@ -136,20 +142,38 @@ public class NoteTrackerUI extends Application {
         Button createNote = new Button("Create");
         createNote.getStyleClass().add(BUTTON_CLASS);
         createNote.setOnAction(event -> {
-//            controller
+            controller.createNoteFromUI(inputValues, noteType);
+            updateNotes(notesForCurrentFilters());
+            resetInput();
         });
 
         VBox vBox = (VBox) getElement("input_holder_id");
         vBox.getChildren().clear();
 
-        for (String label : new NoteFactory().getNoteFor(noteType).getLabels()) {
-            VBox element = createInputElement(label);
-            vBox.getChildren().add(element);
+        List<String> labels = new NoteFactory().getNoteFor(noteType).getLabels();
+
+        if (noteType == Notes.TO_DO) {
+            VBox title = createInputElement(labels.get(0));
+            title.getChildren().add(new Label(labels.get(1)));
+            VBox list = createToDoInput();
+            vBox.getChildren().addAll(title, list);
+        } else {
+            for (String label : labels) {
+                VBox element = createInputElement(label);
+                vBox.getChildren().add(element);
+            }
         }
 
-        VBox list = createToDoInput();
-
         vBox.getChildren().add(createNote);
+    }
+
+    private void resetInput() {
+        @SuppressWarnings("unchecked")
+        ComboBox<String> comboBox = (ComboBox<String>) getElement("ComboBox");
+        comboBox.getSelectionModel().clearSelection();
+        inputValues.clear();
+        VBox vBox = (VBox) getElement("input_holder_id");
+        vBox.getChildren().clear();
     }
 
     private VBox createInputElement(String labelText) {
@@ -159,8 +183,8 @@ public class NoteTrackerUI extends Application {
         TextField inputElement = new TextField();
         inputElement.setPromptText(labelText);
 
-        inputElement.setOnAction(value -> {
-            inputValues.put(labelText, inputElement.getText());
+        inputElement.textProperty().addListener((observable, oldValue, newValue) -> {
+            inputValues.put(labelText, newValue);
         });
 
         return new VBox(label, inputElement);
@@ -169,13 +193,29 @@ public class NoteTrackerUI extends Application {
     private VBox createToDoInput() {
         VBox elements = new VBox();
 
-        TextField textField = new TextField();
-        textField.setPromptText("Enter item to do...");
+        TextField textField = createToDoRandomItem();
 
-        Button addItemInput = new Button("Add another item");
+        Button addItemInput = new Button("Add Item");
+        addItemInput.setOnAction(event -> {
+            elements.getChildren().remove(addItemInput);
+            elements.getChildren().add(createToDoRandomItem());
+            elements.getChildren().add(addItemInput);
+        });
+
         elements.getChildren().addAll(textField, addItemInput);
 
         return elements;
+    }
+
+    private TextField createToDoRandomItem() {
+        TextField textField = new TextField();
+        textField.setPromptText("Enter item to do...");
+        String id = UUID.randomUUID().toString();
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            inputValues.put(id, newValue);
+        });
+
+        return textField;
     }
 
     private VBox assembleFilterOptions() {

@@ -1,6 +1,8 @@
 package views;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.CodeBlock;
@@ -35,10 +37,15 @@ public class CodeBlockFactory implements INoteCreator {
         CodeBlock codeNote = (CodeBlock) note;
 
         Label title = new Label(codeNote.getTitle());
+        title.getStyleClass().add("header");
         Label dateCreated = new Label("Date Created: " + codeNote.getDateCreated());
-        Text codeBlock = new Text(codeNote.getCode());
+        dateCreated.getStyleClass().add("italic");
+        Label subHeader = new Label("Code:");
+        subHeader.getStyleClass().add("h3");
+        Label codeBlock = new Label(codeNote.getCode());
+        codeBlock.getStyleClass().add("codeSnippet");
 
-        expandedInfoView.getChildren().addAll(title, dateCreated, codeBlock);
+        expandedInfoView.getChildren().addAll(title, dateCreated, subHeader, codeBlock);
 
         return expandedInfoView;
     }

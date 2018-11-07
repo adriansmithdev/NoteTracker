@@ -20,10 +20,10 @@
     -fx-background-radius: 5;
     -fx-border-color: black;
     -fx-border-radius: 5;
-    -fx-pref-width: 120;
-    -fx-pref-height: 120;
-    -fx-min-width: 120;
-    -fx-min-height: 120;
+    -fx-pref-width: 150;
+    -fx-pref-height: 150;
+    -fx-min-width: 150;
+    -fx-min-height: 150;
     -fx-padding: 5 15 5 15;
 }
 
@@ -44,14 +44,51 @@
     -fx-wrap-text: true;
 }
 
-.borderpane {
+.borderpane, .anchor {
     -fx-padding: 15;
+    -fx-background-color: rgba(2, 214, 237, 0.35);
 }
 
 .completedToDo {
-    -fx-background-color: rgba(2, 191, 0, 0.62);
+    -fx-background-color: rgba(2, 191, 0, 0.42);
 }
 
 .uncompletedToDo {
-    -fx-background-color: rgba(132, 0, 17, 0.75);
+    -fx-background-color: rgba(132, 0, 17, 0.51);
+}
+
+.codeSnippet {
+    -fx-background-color: #EEEEEE;
+    -fx-font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+    -fx-wrap-text: true;
+    -fx-max-width: 500;
+}
+
+.italic {
+    -fx-font-family: Cambria;
+    -fx-font-style: italic;
+}
+
+.h3 {
+    -fx-font-size: 1.5em;
+    -fx-padding: 5 0 5 0;
+}
+
+.quote {
+    -fx-font-family: Verdana;
+    -fx-font-style: italic;
+}
+
+.author {
+    -fx-font-family: Courier;
+    -fx-font-size: 1.2em;
+}
+
+.filterColumn {
+    -fx-pref-width: 150;
+    -fx-padding: 0 10 0 15;
+}
+
+.tilepane {
+    -fx-padding: 10;
 }

@@ -44,6 +44,7 @@ public class ToDoFactory implements INoteCreator {
         VBox toDoView = new VBox();
 
         Label title = new Label(toDoList.getTitle() + " To-Do's");
+        title.getStyleClass().add("header");
         List<ToDoItem> listOfToDos = toDoList.getToDoItems();
 
         CheckBox[] toDoBoxes = new CheckBox[listOfToDos.size()];

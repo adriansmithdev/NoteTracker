@@ -35,9 +35,13 @@ public class QuoteFactory implements INoteCreator {
         VBox expandedView = new VBox();
 
         Label title = new Label(quote.getTitle());
-        Text completeNote = new Text("\"" + quote.getQuote() + "\"\n" + quote.getAuthor());
+        title.getStyleClass().add("header");
+        Label completeNote = new Label("\"" + quote.getQuote() + "\"");
+        completeNote.getStyleClass().add("quote");
+        Label author = new Label("- " + quote.getAuthor());
+        author.getStyleClass().add("author");
 
-        expandedView.getChildren().addAll(title, completeNote);
+        expandedView.getChildren().addAll(title, completeNote, author);
 
         return expandedView;
     }

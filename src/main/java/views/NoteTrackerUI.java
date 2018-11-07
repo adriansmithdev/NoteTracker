@@ -20,8 +20,8 @@ import java.util.*;
  */
 public class NoteTrackerUI extends Application {
 
-    private static final int WIN_HEIGHT = 500;
-    private static final int WIN_WIDTH = 700;
+    private static final int WIN_HEIGHT = 600;
+    private static final int WIN_WIDTH = 800;
 
     private static final String STAGE_TITLE = "Notes";
     private static final String CSS_SHEET = "NoteTrackerUI.css";
@@ -29,7 +29,7 @@ public class NoteTrackerUI extends Application {
     private static final String INPUT_TYPE = "Card Type";
 
     private static final int CARD_GAP = 8;
-    private static final int PREF_COLUMNS = 3;
+    private static final int PREF_COLUMNS = 10;
 
     private static final String BUTTON_CLASS = "button-element";
     private static final String CARD_CLASS = "card";
@@ -89,6 +89,7 @@ public class NoteTrackerUI extends Application {
         tile.setPrefColumns(PREF_COLUMNS);
         tile.setMaxWidth(Region.USE_PREF_SIZE);
         tile.setId("tile-pane");
+        tile.getStyleClass().add("tilepane");
 
         scrollPane.setContent(tile);
         scrollPane.setFitToWidth(true);
@@ -218,6 +219,7 @@ public class NoteTrackerUI extends Application {
 
     private VBox assembleFilterOptions() {
         VBox vBox = new VBox();
+        vBox.getStyleClass().add("filterColumn");
 
         Label filterLabel = new Label(FILTER_LABEL);
         filterLabel.getStyleClass().add(HEADER_CLASS);
@@ -280,6 +282,7 @@ public class NoteTrackerUI extends Application {
 
     private void assembleModal(VBox content, INote note) {
         AnchorPane anchorPane = new AnchorPane();
+        anchorPane.getStyleClass().add("anchor");
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(content);
@@ -289,15 +292,27 @@ public class NoteTrackerUI extends Application {
         AnchorPane.setRightAnchor(scrollPane, ANCHOR_DISTANCE);
 
         Button backButton = new Button("Back");
+        backButton.getStyleClass().add("button-element");
         backButton.setOnAction(event -> {
             controller.updateNote(note);
             stage.setScene(scene);
+            updateNotes(notesForCurrentFilters());
         });
+
         anchorPane.getChildren().add(backButton);
         AnchorPane.setLeftAnchor(backButton, ANCHOR_DISTANCE);
         AnchorPane.setBottomAnchor(backButton, ANCHOR_DISTANCE);
 
-        stage.setScene(new Scene(anchorPane, WIN_WIDTH, WIN_HEIGHT));
+        Scene sceneExtra = new Scene(anchorPane, WIN_WIDTH, WIN_HEIGHT);
+
+        sceneExtra.getStylesheets().add(
+                Objects.requireNonNull(getClass()
+                        .getClassLoader()
+                        .getResource(CSS_SHEET))
+                        .toExternalForm()
+        );
+
+        stage.setScene(sceneExtra);
     }
 
     @Override

@@ -38,6 +38,8 @@ public class WebLinkFactory implements INoteCreator {
         Hyperlink hyperlink = new Hyperlink();
 
         Label title = new Label(link.getTitle());
+        title.getStyleClass().add("header");
+
         if (link.getURL().startsWith("https://")) {
             hyperlink.setText(link.getURL().substring(8));
         } else {

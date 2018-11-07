@@ -11,7 +11,6 @@ import java.util.Map;
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
 public class DBData implements INoteCRUD {
@@ -24,8 +23,7 @@ public class DBData implements INoteCRUD {
     /**
      * Constructs DBData object by instantiation Connection object to connect to database.
      */
-    public DBData()
-    {
+    public DBData() {
         try {
             //get connected to database
             this.conn = DriverManager.getConnection("jdbc:sqlite:notesDB.sqlite");
@@ -44,8 +42,7 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public void createNote(INote note)
-    {
+    public void createNote(INote note) {
         if (note.getType() == Notes.QUOTATION) {
             createQuote(note);
         } else if (note.getType() == Notes.CODE_BLOCK) {
@@ -57,8 +54,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void createWebLink(INote note)
-    {
+    private void createWebLink(INote note) {
         WebLink link = (WebLink) note;
 
         try {
@@ -72,8 +68,7 @@ public class DBData implements INoteCRUD {
 
     }
 
-    private void createToDoList(INote note)
-    {
+    private void createToDoList(INote note) {
         ToDo toDo = (ToDo) note;
 
         try {
@@ -99,8 +94,7 @@ public class DBData implements INoteCRUD {
 
     }
 
-    private void createCodeBlock(INote note)
-    {
+    private void createCodeBlock(INote note) {
         CodeBlock quote = (CodeBlock) note;
 
         try {
@@ -113,8 +107,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void createQuote(INote note)
-    {
+    private void createQuote(INote note) {
         Quotation quote = (Quotation) note;
 
         try {
@@ -129,8 +122,7 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public boolean removeNote(INote note)
-    {
+    public boolean removeNote(INote note) {
         try {
             removeNoteFromTable(note, notesToTableMap.get(note.getType()));
             return true;
@@ -140,15 +132,13 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void removeNoteFromTable(INote note, String table) throws SQLException
-    {
+    private void removeNoteFromTable(INote note, String table) throws SQLException {
         Statement stmt = conn.createStatement();
         stmt.execute("DELETE FROM " + table + " WHERE DateCreated = '" + note.getDateCreated() + "'");
     }
 
     @Override
-    public void updateNote(INote note)
-    {
+    public void updateNote(INote note) {
         try {
             if (note.getType() == Notes.QUOTATION) {
                 updateQuote(note);
@@ -164,8 +154,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void updateWebLink(INote note) throws SQLException
-    {
+    private void updateWebLink(INote note) throws SQLException {
         WebLink link = (WebLink) note;
 
         Statement stmt = conn.createStatement();
@@ -175,8 +164,7 @@ public class DBData implements INoteCRUD {
                 "' WHERE DateCreated = '" + link.getDateCreated() + "'");
     }
 
-    private void updateToDoList(INote note) throws SQLException
-    {
+    private void updateToDoList(INote note) throws SQLException {
         ToDo toDo = (ToDo) note;
 
         Statement stmt = conn.createStatement();
@@ -198,8 +186,7 @@ public class DBData implements INoteCRUD {
     }
 
 
-    private void updateCodeBlock(INote note) throws SQLException
-    {
+    private void updateCodeBlock(INote note) throws SQLException {
         CodeBlock codeBlock = (CodeBlock) note;
 
         Statement stmt = conn.createStatement();
@@ -210,8 +197,7 @@ public class DBData implements INoteCRUD {
                 "WHERE DateCreated = '" + codeBlock.getDateCreated() + "'");
     }
 
-    private void updateQuote(INote note) throws SQLException
-    {
+    private void updateQuote(INote note) throws SQLException {
         Quotation quote = (Quotation) note;
 
         Statement stmt = conn.createStatement();
@@ -224,8 +210,7 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public List<INote> getNotes()
-    {
+    public List<INote> getNotes() {
         List<INote> noteList = new ArrayList<>();
 
         try {
@@ -242,8 +227,7 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public List<INote> getNotes(Notes typeOfNote)
-    {
+    public List<INote> getNotes(Notes typeOfNote) {
         List<INote> notes = new ArrayList<>();
         try {
             if (typeOfNote == Notes.QUOTATION) {
@@ -261,8 +245,7 @@ public class DBData implements INoteCRUD {
         return notes;
     }
 
-    private void addCodeBlocksToList(List<INote> listOfNotes) throws SQLException
-    {
+    private void addCodeBlocksToList(List<INote> listOfNotes) throws SQLException {
         ResultSet results = conn.createStatement().executeQuery(
                 "SELECT DateCreated, title, Code FROM CodeBlocksTable");
 
@@ -277,8 +260,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void addQuotesToList(List<INote> listOfNotes) throws SQLException
-    {
+    private void addQuotesToList(List<INote> listOfNotes) throws SQLException {
         ResultSet results = conn.createStatement().executeQuery(
                 "SELECT DateCreated, title, Quote, Author FROM QuotesTable");
 
@@ -294,8 +276,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void addToDosToList(List<INote> listOfNotes) throws SQLException
-    {
+    private void addToDosToList(List<INote> listOfNotes) throws SQLException {
         ResultSet results = conn.createStatement().executeQuery(
                 "SELECT DateCreated, Title, ListID FROM ToDoListTable");
 
@@ -326,8 +307,7 @@ public class DBData implements INoteCRUD {
         }
     }
 
-    private void addWebLinksToList(List<INote> listOfNotes) throws SQLException
-    {
+    private void addWebLinksToList(List<INote> listOfNotes) throws SQLException {
         ResultSet results = conn.createStatement().executeQuery(
                 "SELECT DateCreated, title, URL FROM WebLinksTable");
 
@@ -343,8 +323,7 @@ public class DBData implements INoteCRUD {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "DBData{" +
                 "conn=" + conn +
                 '}';

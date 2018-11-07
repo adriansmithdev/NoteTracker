@@ -24,7 +24,7 @@ public class Controller {
 
     /**
      * @param inputValues user input from UI
-     * @param noteType type of note being generated
+     * @param noteType    type of note being generated
      */
     public void createNoteFromUI(Map<String, String> inputValues, Notes noteType) {
         List<String> labels = new NoteFactory().getNoteFor(noteType).getLabels();
@@ -99,8 +99,7 @@ public class Controller {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Controller{" +
                 "model=" + model +
                 '}';

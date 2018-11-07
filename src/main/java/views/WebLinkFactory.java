@@ -16,10 +16,9 @@ import java.awt.Desktop;
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
-public class WebLinkFactory implements INoteCreator  {
+public class WebLinkFactory implements INoteCreator {
     @Override
     public VBox createSampleView(INote note) {
         WebLink link = (WebLink) note;
@@ -39,16 +38,16 @@ public class WebLinkFactory implements INoteCreator  {
         Hyperlink hyperlink = new Hyperlink();
 
         Label title = new Label(link.getTitle());
-        if(link.getURL().startsWith("https://")) {
+        if (link.getURL().startsWith("https://")) {
             hyperlink.setText(link.getURL().substring(8));
-        }else{
+        } else {
             hyperlink.setText(link.getURL().substring(7));
         }
 
         hyperlink.setOnAction(event -> {
 
-            if(Desktop.isDesktopSupported()){
-                try{
+            if (Desktop.isDesktopSupported()) {
+                try {
                     Desktop.getDesktop().browse(new URI(link.getURL()));
                 } catch (URISyntaxException | IOException e) {
                     e.printStackTrace();

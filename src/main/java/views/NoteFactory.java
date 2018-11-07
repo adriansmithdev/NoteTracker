@@ -5,7 +5,6 @@ import model.Notes;
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
 public class NoteFactory {

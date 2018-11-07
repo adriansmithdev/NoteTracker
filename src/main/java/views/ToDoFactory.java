@@ -13,10 +13,9 @@ import java.util.List;
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
-public class ToDoFactory implements INoteCreator  {
+public class ToDoFactory implements INoteCreator {
     @Override
     public VBox createSampleView(INote note) {
         ToDo toDoList = (ToDo) note;
@@ -26,11 +25,11 @@ public class ToDoFactory implements INoteCreator  {
 
         toDoView.getChildren().addAll(title);
 
-        if(toDoList.isListCompleted()) {
+        if (toDoList.isListCompleted()) {
             toDoView.getStyleClass().add("completedToDo");
             Label completedStatus = new Label("DONE");
             toDoView.getChildren().add(completedStatus);
-        }else {
+        } else {
             toDoView.getStyleClass().add("uncompletedToDo");
             Label completedStatus = new Label("NOT DONE");
             toDoView.getChildren().add(completedStatus);
@@ -49,7 +48,7 @@ public class ToDoFactory implements INoteCreator  {
 
         CheckBox[] toDoBoxes = new CheckBox[listOfToDos.size()];
 
-        for(int i = 0; i < listOfToDos.size(); i++){
+        for (int i = 0; i < listOfToDos.size(); i++) {
             ToDoItem individualToDo = listOfToDos.get(i);
             toDoBoxes[i] = new CheckBox(individualToDo.getToDo());
             toDoBoxes[i].setSelected(individualToDo.isCompleted());

@@ -1,16 +1,13 @@
 package views;
 
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.INote;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
 public interface INoteCreator {

@@ -1,8 +1,6 @@
 package launch;
 
-import controller.Controller;
 import javafx.application.Application;
-import model.database.INoteCRUD;
 import views.NoteTrackerUI;
 
 /**
@@ -12,6 +10,11 @@ import views.NoteTrackerUI;
  */
 public class Launcher {
 
+    /**
+     * Launches the program window
+     *
+     * @param args the options to start program with
+     */
     public static void main(String[] args) {
         Application.launch(NoteTrackerUI.class, args);
     }

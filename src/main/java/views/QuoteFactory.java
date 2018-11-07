@@ -12,14 +12,12 @@ import java.util.List;
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
 public class QuoteFactory implements INoteCreator {
 
     @Override
-    public VBox createSampleView(INote note)
-    {
+    public VBox createSampleView(INote note) {
         Quotation quote = (Quotation) note;
         VBox noteView = new VBox();
 
@@ -32,8 +30,7 @@ public class QuoteFactory implements INoteCreator {
     }
 
     @Override
-    public VBox createExpandedView(INote note)
-    {
+    public VBox createExpandedView(INote note) {
         Quotation quote = (Quotation) note;
         VBox expandedView = new VBox();
 

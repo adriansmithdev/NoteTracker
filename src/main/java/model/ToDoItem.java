@@ -3,7 +3,6 @@ package model;
 /**
  * @author Adrian Smith
  * @author Kyle Johnson
- *
  * @version 1.0
  */
 public class ToDoItem {
@@ -11,11 +10,10 @@ public class ToDoItem {
     private boolean isCompleted;
 
     /**
-     * @param task task to be completed
+     * @param task        task to be completed
      * @param isCompleted whether or not the task is completed
      */
-    public ToDoItem(String task, boolean isCompleted)
-    {
+    public ToDoItem(String task, boolean isCompleted) {
         this.toDo = task;
         this.isCompleted = isCompleted;
     }
@@ -23,30 +21,26 @@ public class ToDoItem {
     /**
      * @return task being stored
      */
-    public String getToDo()
-    {
+    public String getToDo() {
         return toDo;
     }
 
     /**
      * @return true if task is completed, false if not
      */
-    public boolean isCompleted()
-    {
+    public boolean isCompleted() {
         return isCompleted;
     }
 
     /**
      * @param completed sets isCompleted to completed
      */
-    public void setCompleted(boolean completed)
-    {
+    public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ToDoItem{" +
                 "toDo='" + toDo + '\'' +
                 ", isCompleted=" + isCompleted +

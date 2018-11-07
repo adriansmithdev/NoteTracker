@@ -42,7 +42,13 @@ public class CodeBlockFactory implements INoteCreator {
         dateCreated.getStyleClass().add("italic");
         Label subHeader = new Label("Code:");
         subHeader.getStyleClass().add("h3");
-        Label codeBlock = new Label(codeNote.getCode());
+        String code = codeNote.getCode();
+        String[] codeArray = code.split("\\s{2,}");
+        String result = "";
+        for (int i = 0; i < codeArray.length; i++) {
+            result += codeArray[i] + "\n";
+        }
+        Label codeBlock = new Label(result);
         codeBlock.getStyleClass().add("codeSnippet");
 
         expandedInfoView.getChildren().addAll(title, dateCreated, subHeader, codeBlock);
